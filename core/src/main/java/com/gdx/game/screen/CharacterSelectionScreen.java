@@ -63,8 +63,8 @@ public class CharacterSelectionScreen extends BaseScreen {
     private void handleCharacterImage() {
         player = playerSprites.get(CharacterRecord.CHARACTERS[currentCharacter].getName());
         playerImage = new AnimatedImage();
-        playerImage.setWidth(16);
-        playerImage.setHeight(16);
+        playerImage.setWidth(Entity.FRAME_WIDTH);
+        playerImage.setHeight(Entity.FRAME_HEIGHT);
         playerImage.setEntity(player);
         playerImage.setTouchable(Touchable.disabled);
         playerImage.setCurrentAnimation(Entity.AnimationType.IDLE);

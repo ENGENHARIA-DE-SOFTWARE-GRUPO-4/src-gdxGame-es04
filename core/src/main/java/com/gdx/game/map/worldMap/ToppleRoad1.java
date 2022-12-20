@@ -20,13 +20,13 @@ public class ToppleRoad1 extends Map {
         super(MapFactory.MapType.TOPPLE_ROAD_1, mapPath);
 
         //Special cases
-        Entity rabite = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.RABITE);
+        /*Entity rabite = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.RABITE);
         initSpecialEntityPosition(rabite);
         mapEntities.add(rabite);
 
         Entity rabite2 = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.RABITE2);
         initSpecialEntityPosition(rabite2);
-        mapEntities.add(rabite2);
+        mapEntities.add(rabite2);*/
 
     }
 

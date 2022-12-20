@@ -68,8 +68,8 @@ public class Entity {
 		LOOK_RIGHT
 	}
 
-	public static final int FRAME_WIDTH = 16;
-	public static final int FRAME_HEIGHT = 16;
+	public static final int FRAME_WIDTH = 19;
+	public static final int FRAME_HEIGHT = 31;
 	private static final int MAX_COMPONENTS = 5;
 
 	private Json json;

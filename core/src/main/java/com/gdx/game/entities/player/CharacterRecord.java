@@ -22,8 +22,8 @@ public class CharacterRecord {
     private final int baseDefense;
     private final String name;
 
-    public static final List<EntityFactory.EntityType> charactersList = Arrays.asList(WARRIOR, MAGE, THIEF, GRAPPLER,
-            CLERIC);
+    public static final List<EntityFactory.EntityType> charactersList = Arrays.asList(/*WARRIOR, */MAGE/*, THIEF, GRAPPLER,
+            CLERIC*/);
 
     public static CharacterRecord[] CHARACTERS = charactersList.stream()
             .map(c -> new CharacterRecord(2, 2, loadAPStats(c.name()), loadDPStats(c.name()), c.name()))

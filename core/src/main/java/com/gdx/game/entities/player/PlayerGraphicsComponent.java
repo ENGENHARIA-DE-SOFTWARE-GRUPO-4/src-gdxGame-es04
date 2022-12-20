@@ -69,6 +69,9 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
 
     @Override
     public void update(Entity entity, MapManager mapMgr, Batch batch, float delta) {
+        float playerImageWidth = 1;
+        float playerImageHeight = (float) Math.round((float)Entity.FRAME_HEIGHT/(float)Entity.FRAME_WIDTH*100)/100;
+
         updateAnimations(delta);
 
         //Player has moved
@@ -81,7 +84,7 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
         camera.update();
 
         batch.begin();
-        batch.draw(currentFrame, currentPosition.x, currentPosition.y, 1, 1);
+        batch.draw(currentFrame, currentPosition.x, currentPosition.y, playerImageWidth, playerImageHeight);
         batch.end();
 
         //Used to graphically debug boundingboxes

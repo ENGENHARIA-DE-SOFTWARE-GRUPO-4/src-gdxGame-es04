@@ -65,7 +65,7 @@
 			frameDuration: 0.15
 			animationType: IDLE
 			texturePaths: [
-				sprites/characters/Mage.png
+				sprites/characters/mage_test.png
 			]
 			gridPoints: [
 				{
@@ -79,18 +79,18 @@
 				{
 					x: 0
 					y: 2
-				}
+				}/*
 				{
 					x: 0
 					y: 3
-				}
+				}*/
 			]
 		}
 		{
 			frameDuration: 0.15
 			animationType: WALK_DOWN
 			texturePaths: [
-				sprites/characters/Mage.png
+				sprites/characters/mage_test.png
 			]
 			gridPoints: [
 				{
@@ -104,18 +104,18 @@
 				{
 					x: 0
 					y: 2
-				}
+				}/*
 				{
 					x: 0
 					y: 3
-				}
+				}*/
 			]
 		}
 		{
 			frameDuration: 0.15
 			animationType: WALK_LEFT
 			texturePaths: [
-				sprites/characters/Mage.png
+				sprites/characters/mage_test.png
 			]
 			gridPoints: [
 				{
@@ -129,18 +129,18 @@
 				{
 					x: 1
 					y: 2
-				}
+				}/*
 				{
 					x: 1
 					y: 3
-				}
+				}*/
 			]
 		}
 		{
 			frameDuration: 0.15
 			animationType: WALK_RIGHT
 			texturePaths: [
-				sprites/characters/Mage.png
+				sprites/characters/mage_test.png
 			]
 			gridPoints: [
 				{
@@ -154,18 +154,18 @@
 				{
 					x: 2
 					y: 2
-				}
+				}/*
 				{
 					x: 2
 					y: 3
-				}
+				}*/
 			]
 		}
 		{
 			frameDuration: 0.15
 			animationType: WALK_UP
 			texturePaths: [
-				sprites/characters/Mage.png
+				sprites/characters/mage_test.png
 			]
 			gridPoints: [
 				{
@@ -179,18 +179,18 @@
 				{
 					x: 3
 					y: 2
-				}
+				}/*
 				{
 					x: 3
 					y: 3
-				}
+				}*/
 			]
 		}
 		{
 			frameDuration: 0.15
 			animationType: LOOK_RIGHT
 			texturePaths: [
-				sprites/characters/Mage.png
+				sprites/characters/mage_test.png
 			]
 			gridPoints: [
 				{

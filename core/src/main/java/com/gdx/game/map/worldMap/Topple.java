@@ -22,7 +22,7 @@ public class Topple extends Map {
         super(MapFactory.MapType.TOPPLE, mapPath);
 
         json = new Json();
-
+/*
         Entity innKeeper = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.TOWN_INNKEEPER);
         initSpecialEntityPosition(innKeeper);
         mapEntities.add(innKeeper);
@@ -41,7 +41,7 @@ public class Topple extends Map {
 
         Entity townfolk4 = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.TOWN_FOLK4);
         initSpecialEntityPosition(townfolk4);
-        mapEntities.add(townfolk4);
+        mapEntities.add(townfolk4);*/
     }
 
     @Override
