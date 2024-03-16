@@ -9,6 +9,8 @@ val logbackVersion by extra {"1.4.11"}
 plugins {
     java
     `java-library`
+    id("org.sonarqube") version "4.4.1.3373"
+    id("checkstyle")
 }
 
 allprojects {
@@ -17,6 +19,7 @@ allprojects {
 
     apply(plugin = "java")
     apply(plugin = "java-library")
+    apply(plugin = "checkstyle")
 
     tasks.named<Test>("test") {
         useJUnitPlatform()
@@ -34,6 +37,18 @@ allprojects {
         testImplementation("org.assertj:assertj-core:$assertJVersion")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitJupiterVersion")
     }
+
+    sonar {
+        properties {
+            property("sonar.projectKey", "gdxGame-es04")
+            property("sonar.organization", "es04-ufcg")
+            property("sonar.host.url", "http://localhost:9000")
+        }
+    }
+
+    checkstyle {
+        configFile = file("config/checkstyle/checkstyle.xml")
+    }
 }
 
 project(":desktop") {
@@ -44,9 +59,9 @@ project(":desktop") {
 
     dependencies {
         implementation(project(":core"))
-        implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
-        implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
-    }
+        implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion");
+        implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop");
+    };"7.8.1"
 }
 
 project(":core") {
@@ -63,4 +78,5 @@ project(":core") {
         implementation("ch.qos.logback:logback-classic:$logbackVersion")
         testImplementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
     }
+
 }
