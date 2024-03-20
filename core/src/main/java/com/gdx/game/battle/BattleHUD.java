@@ -265,8 +265,6 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 battleState.determineTurn();
             }
 
-            default -> {
-            }
         }
     }
 
@@ -283,8 +281,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                     notificationUI.setVisible(true);
                 }
             }
-            default -> {
-            }
+
         }
     }
 
