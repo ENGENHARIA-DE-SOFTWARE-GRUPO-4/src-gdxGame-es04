@@ -309,32 +309,22 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                     drops.add(value);
                 }
             }
-            default -> {
-            }
         }
     }
 
     @Override
     public void onNotify(int value, StatusObserver.StatusEvent event) {
         switch (event) {
-            case UPDATED_HP -> {
+            case UPDATED_HP ->
                 ProfileManager.getInstance().setProperty("currentPlayerHP", battleStatusUI.getHPValue());
-            }
             case UPDATED_LEVEL -> {
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", battleStatusUI.getLevelValue());
                 createStatsUpUI(battleStatusUI.getNbrLevelUp());
             }
-            case UPDATED_MP -> {
+            case UPDATED_MP ->
                 ProfileManager.getInstance().setProperty("currentPlayerMP", battleStatusUI.getMPValue());
-            }
-            case UPDATED_XP -> {
+            case UPDATED_XP ->
                 ProfileManager.getInstance().setProperty("currentPlayerXP", battleStatusUI.getXPValue());
-            }
-            case LEVELED_UP -> {
-                //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
-            }
-            default -> {
-            }
         }
     }
 
