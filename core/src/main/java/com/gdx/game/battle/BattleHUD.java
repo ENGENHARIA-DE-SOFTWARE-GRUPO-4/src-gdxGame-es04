@@ -238,7 +238,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 if (isCritical) {
                     dmgOpponentValLabel.setColor(Color.ORANGE);
                 }
-                //battleShakeCam.startShaking();
+
                 dmgOpponentValLabel.setVisible(true);
                 LOGGER.debug("Player deals {} damages", damageEnemy);
             }
