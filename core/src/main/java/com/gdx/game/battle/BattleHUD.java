@@ -220,7 +220,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 if (isCritical) {
                     dmgPlayerValLabel.setColor(Color.ORANGE);
                 }
-                //battleShakeCam.startShaking();
+
                 dmgPlayerValLabel.setVisible(true);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 battleStatusUI.setHPValue(hpVal);
