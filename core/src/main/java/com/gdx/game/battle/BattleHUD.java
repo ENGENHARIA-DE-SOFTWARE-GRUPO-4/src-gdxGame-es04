@@ -264,11 +264,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 LOGGER.debug("Player turn done");
                 battleState.determineTurn();
             }
-            /*case PLAYER_USED_MAGIC:
-                float x = currentImagePosition.x + (enemyWidth/2);
-                float y = currentImagePosition.y + (enemyHeight/2);
-                //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
-                break;*/
+
             default -> {
             }
         }
