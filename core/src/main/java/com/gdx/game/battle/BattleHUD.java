@@ -334,11 +334,11 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
     public void onNotify(String value, ClassObserver.ClassEvent event) {
         if (Objects.requireNonNull(event) == ClassEvent.CHECK_UPGRADE_TREE_CLASS) {
             String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
-            int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
-            int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+            int characterAP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+            int characterDP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
             String configFilePath = player.getEntityConfig().getClassTreePath();
             Tree tree = Tree.buildClassTree(configFilePath);
-            Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
+            Node node = tree.checkForClassUpgrade(currentClass, characterAP, characterDP);
             Tree.saveNewClass(node);
 
             if (node != null) {
