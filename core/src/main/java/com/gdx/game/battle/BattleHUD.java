@@ -298,10 +298,8 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 int typeValue = Integer.parseInt(strings[1]);
 
                 if (InventoryItem.doesRestoreHP(type)) {
-                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_EATING);
                     battleStatusUI.addHPValue(typeValue);
                 } else if (InventoryItem.doesRestoreMP(type)) {
-                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_DRINKING);
                     battleStatusUI.addMPValue(typeValue);
                 }
             }
