@@ -427,17 +427,17 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void pause() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: pause");
     }
 
     @Override
     public void resume() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: resume");
     }
 
     @Override
     public void hide() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: hide");
     }
 
     @Override
