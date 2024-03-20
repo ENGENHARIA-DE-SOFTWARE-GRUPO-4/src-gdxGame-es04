@@ -36,6 +36,8 @@ import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
@@ -330,21 +332,17 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(String value, ClassObserver.ClassEvent event) {
-        switch (event) {
-            case CHECK_UPGRADE_TREE_CLASS -> {
-                String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
-                int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
-                int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
-                String configFilePath = player.getEntityConfig().getClassTreePath();
-                Tree tree = Tree.buildClassTree(configFilePath);
-                Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
-                Tree.saveNewClass(node);
+        if (Objects.requireNonNull(event) == ClassEvent.CHECK_UPGRADE_TREE_CLASS) {
+            String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
+            int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+            int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+            String configFilePath = player.getEntityConfig().getClassTreePath();
+            Tree tree = Tree.buildClassTree(configFilePath);
+            Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
+            Tree.saveNewClass(node);
 
-                if (node != null) {
-                    notificationUI.loadUpgradeClass(node.getClassId());
-                }
-            }
-            default -> {
+            if (node != null) {
+                notificationUI.loadUpgradeClass(node.getClassId());
             }
         }
     }
