@@ -395,7 +395,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void show() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: show");
     }
 
     @Override
