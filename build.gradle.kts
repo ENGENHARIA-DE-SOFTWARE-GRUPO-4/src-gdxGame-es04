@@ -40,14 +40,17 @@ allprojects {
 
     sonar {
         properties {
-            property("sonar.projectKey", "gdxGame-es04")
+            property("sonar.projectKey", "src-gdxGame-es04")
             property("sonar.organization", "es04-ufcg")
             property("sonar.host.url", "http://localhost:9000")
         }
     }
 
     checkstyle {
-        configFile = file("config/checkstyle/checkstyle.xml")
+        toolVersion = "8.44"
+        configFile = rootProject.file("config/checkstyle.xml");
+        reportsDir = file("reports/checkstyle")
+
     }
 }
 
