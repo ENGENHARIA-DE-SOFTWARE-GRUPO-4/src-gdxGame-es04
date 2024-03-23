@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <ruleset name="Main Ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/schemas/pmd_ruleset_2_0_0.xsd">
+        <description>Basic PMD Ruleset</description>
+
+        <!-- Uncomment and adjust the following rule tags to enable specific rules -->
+
+         <rule ref="rulesets/java/quickstart.xml/AvoidBranchingStatementAsLastInLoop"/>
+         <rule ref="category/java/errorprone.xml/AvoidLiteralsInIfCondition" />
+         <rule ref="category/java/codestyle.xml/AvoidPrefixingMethodParameters" />
+         <rule ref="category/java/bestpractices.xml/AvoidPrintStackTrace" />
+         <rule ref="category/java/bestpractices.xml/UseAssertEqualsInsteadOfAssertTrue" />
+         <rule ref="category/java/bestpractices.xml/UseAssertSameInsteadOfAssertTrue" />
+         <rule ref="category/java/bestpractices.xml/UseAssertTrueInsteadOfAssertEquals" />
+         <rule ref="category/java/design.xml/UseUtilityClass" />
+
+        <!-- Uncomment and adjust the following rule tags to configure specific rules -->
+
+        <!-- <rule ref="rulesets/java/quickstart.xml/AvoidBranchingStatementAsLastInLoop"> -->
+        <!--     <properties> -->
+        <!--         <property name="severity" value="1"/> -->
+        <!--     </properties> -->
+        <!-- </rule> -->
+
+    </ruleset>
