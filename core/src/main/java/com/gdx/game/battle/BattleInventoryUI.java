@@ -189,7 +189,6 @@ public class BattleInventoryUI extends Window implements InventorySubject {
                 if (topItemName.equalsIgnoreCase(filterOutName)) {
                     continue;
                 }
-                //System.out.println("[i] " + i + " itemtype: " + inventorySlot.getTopInventoryItem().getItemTypeID().toString() + " numItems " + numItems);
                 items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
                         numItems, inventorySlot.getTopInventoryItem().getName()));
             }
@@ -207,7 +206,6 @@ public class BattleInventoryUI extends Window implements InventorySubject {
             }
             int numItems = inventorySlot.getNumItems(name);
             if (numItems > 0) {
-                //System.out.println("[i] " + i + " itemtype: " + inventorySlot.getTopInventoryItem().getItemTypeID().toString() + " numItems " + numItems);
                 items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
                         numItems, name));
             }
@@ -228,13 +226,11 @@ public class BattleInventoryUI extends Window implements InventorySubject {
                 int numItems = inventorySlot.getNumItems();
                 if (numItems == 0) {
                     item.setLocationIndex(index);
-                    //System.out.println("[index] " + index + " itemtype: " + item.getItemTypeAtLocation() + " numItems " + numItems);
                     index++;
                     break;
                 }
             }
             if (index == sourceCells.size) {
-                //System.out.println("[index] " + index + " itemtype: " + item.getItemTypeAtLocation() + " numItems " + item.getNumberItemsAtLocation());
                 item.setLocationIndex(index-1);
             }
         }
