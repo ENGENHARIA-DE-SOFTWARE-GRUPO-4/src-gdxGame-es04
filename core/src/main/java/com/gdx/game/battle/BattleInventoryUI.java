@@ -35,8 +35,8 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     private DragAndDrop dragAndDrop;
     private Array<Actor> inventoryActors;
 
-    private final int slotWidth = 52;
-    private final int slotHeight = 52;
+    private static final int slotWidth = 52;
+    private static final int slotHeight = 52;
 
     private Array<InventoryObserver> observers;
 
