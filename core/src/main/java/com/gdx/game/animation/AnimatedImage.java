@@ -56,12 +56,10 @@ public class AnimatedImage extends Image {
 
         Drawable drawable = getDrawable();
         if (drawable == null) {
-            //Gdx.app.debug(TAG, "Drawable is NULL!");
             return;
         }
         frameTime = (frameTime + delta)%5;
         TextureRegion currentRegion = entity.getAnimation(currentAnimationType).getKeyFrame(frameTime, true);
-        //Gdx.app.debug(TAG, "Keyframe number is " + _animation.getKeyFrameIndex(_frameTime));
         ((TextureRegionDrawable) drawable).setRegion(currentRegion);
 
         for (Action action : getActions()) {

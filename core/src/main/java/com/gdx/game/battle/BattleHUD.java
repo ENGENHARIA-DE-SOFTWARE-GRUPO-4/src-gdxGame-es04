@@ -203,13 +203,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 currentOpponentImagePosition.set(opponentImage.getX(), opponentImage.getY());
                 LOGGER.debug("Opponent added on battle map");
             }
-                /*if ( battleShakeCam == null ){
-                    battleShakeCam = new ShakeCamera(currentImagePosition.x, currentImagePosition.y, 30.0f);
-                }*/
 
-            //Gdx.app.debug(TAG, "Image position: " + _image.getX() + "," + _image.getY() );
-
-            //this.getTitleLabel().setText("Level " + battleState.getCurrentZoneLevel() + " " + entity.getEntityConfig().getEntityID());
             case PLAYER_HIT_DAMAGE -> {
                 int damagePlayer = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
                 boolean isCritical = Boolean.parseBoolean(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString()));
@@ -220,7 +214,6 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 if (isCritical) {
                     dmgPlayerValLabel.setColor(Color.ORANGE);
                 }
-                //battleShakeCam.startShaking();
                 dmgPlayerValLabel.setVisible(true);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 battleStatusUI.setHPValue(hpVal);
@@ -238,7 +231,6 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 if (isCritical) {
                     dmgOpponentValLabel.setColor(Color.ORANGE);
                 }
-                //battleShakeCam.startShaking();
                 dmgOpponentValLabel.setVisible(true);
                 LOGGER.debug("Player deals {} damages", damageEnemy);
             }
@@ -264,11 +256,6 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 LOGGER.debug("Player turn done");
                 battleState.determineTurn();
             }
-            /*case PLAYER_USED_MAGIC:
-                float x = currentImagePosition.x + (enemyWidth/2);
-                float y = currentImagePosition.y + (enemyHeight/2);
-                //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
-                break;*/
             default -> {
             }
         }
