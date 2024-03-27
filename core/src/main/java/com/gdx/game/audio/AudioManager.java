@@ -6,7 +6,7 @@ import com.gdx.game.manager.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public class AudioManager implements AudioObserver {
 
@@ -16,10 +16,10 @@ public class AudioManager implements AudioObserver {
 
     private Music currentMusic;
 
-    private Hashtable<String, Music> queuedMusic;
+    private HashMap<String, Music> queuedMusic;
 
     private AudioManager() {
-        queuedMusic = new Hashtable<>();
+        queuedMusic = new HashMap<>();
     }
 
     public static AudioManager getInstance() {
