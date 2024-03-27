@@ -40,7 +40,7 @@ public class AnimatedImage extends Image {
     public void setCurrentAnimation(Entity.AnimationType animationType){
         Animation<TextureRegion> animation = entity.getAnimation(animationType);
         if ( animation == null ){
-            LOGGER.debug("Animation type {} does not exist!", animationType.toString());
+            LOGGER.debug("Animation type {} does not exist!", animationType);
             return;
         }
 
