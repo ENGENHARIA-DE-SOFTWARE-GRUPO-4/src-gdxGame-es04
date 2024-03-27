@@ -73,9 +73,9 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
     private boolean opponentDefeated = false;
     private float fadeTimeAlpha = 1;
 
-    public BattleHUD(MapManager mapManager_, Stage battleStage, BattleState battleState_) {
-        this.mapManager = mapManager_;
-        this.battleState = battleState_;
+    public BattleHUD(MapManager mapManagerLocal, Stage battleStage, BattleState battleStateLocal) {
+        this.mapManager = mapManagerLocal;
+        this.battleState = battleStateLocal;
 
         json = new Json();
         player = mapManager.getPlayer();
