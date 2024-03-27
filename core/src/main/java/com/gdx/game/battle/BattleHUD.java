@@ -57,10 +57,10 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
     private BattleConversation battleConversation;
     private Array<String> drops;
 
-    private final int enemyWidth = 50;
-    private final int enemyHeight = 50;
-    private final int playerWidth = 50;
-    private final int playerHeight = 50;
+    private static final int ENEMY_WIDTH = 50;
+    private static final int ENEMY_HEIGHT = 50;
+    private static final int PLAYER_WIDTH = 50;
+    private static final int PLAYER_HEIGHT = 50;
 
     private float origDmgPlayerValLabelY = 0;
     private float origDmgOpponentValLabelY = 0;
@@ -97,10 +97,10 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
         dmgPlayerValLabel = new Label("0", ResourceManager.skin);
         dmgPlayerValLabel.setVisible(false);
-        origDmgPlayerValLabelY = dmgPlayerValLabel.getY() + playerHeight;
+        origDmgPlayerValLabelY = dmgPlayerValLabel.getY() + PLAYER_HEIGHT;
         dmgOpponentValLabel = new Label("0", ResourceManager.skin);
         dmgOpponentValLabel.setVisible(false);
-        origDmgOpponentValLabelY = dmgOpponentValLabel.getY() + enemyHeight;
+        origDmgOpponentValLabelY = dmgOpponentValLabel.getY() + ENEMY_HEIGHT;
 
         battleStatusUI = new BattleStatusUI();
         battleStatusUI.setKeepWithinStage(false);
@@ -147,9 +147,9 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
         notificationUI.validate();
         battleInventoryUI.validate();
 
-        dmgPlayerLabelTable.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
+        dmgPlayerLabelTable.add(dmgPlayerValLabel).padLeft(PLAYER_WIDTH / 2).padBottom(PLAYER_HEIGHT * 4);
         dmgPlayerLabelTable.setPosition(currentPlayerImagePosition.x, currentPlayerImagePosition.y);
-        dmgOpponentLabelTable.add(dmgOpponentValLabel).padLeft(enemyWidth / 2).padBottom(enemyHeight * 4);
+        dmgOpponentLabelTable.add(dmgOpponentValLabel).padLeft(ENEMY_WIDTH / 2).padBottom(ENEMY_HEIGHT * 4);
         dmgOpponentLabelTable.setPosition(currentOpponentImagePosition.x, currentOpponentImagePosition.y);
 
         battleHUDStage.addActor(playerImage);
@@ -188,7 +188,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
             case PLAYER_ADDED -> {
                 playerImage.setEntity(entity);
                 playerImage.setCurrentAnimation(Entity.AnimationType.WALK_RIGHT);
-                playerImage.setSize(playerWidth, playerHeight);
+                playerImage.setSize(PLAYER_WIDTH, PLAYER_HEIGHT);
                 playerImage.setPosition(0, 200);
                 playerImage.addAction(Actions.moveTo(200, 200, 2));
                 currentPlayerImagePosition.set(((MoveToAction) playerImage.getActions().get(0)).getX(), playerImage.getY());
@@ -197,7 +197,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
             case OPPONENT_ADDED -> {
                 opponentImage.setEntity(entity);
                 opponentImage.setCurrentAnimation(Entity.AnimationType.IMMOBILE);
-                opponentImage.setSize(enemyWidth, enemyHeight);
+                opponentImage.setSize(ENEMY_WIDTH, ENEMY_HEIGHT);
                 opponentImage.setPosition(600, 200);
                 currentOpponentImagePosition.set(opponentImage.getX(), opponentImage.getY());
                 LOGGER.debug("Opponent added on battle map");
