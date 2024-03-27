@@ -46,7 +46,6 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
     private BattleStatusUI battleStatusUI;
     private ConversationUI notificationUI;
     private BattleInventoryUI battleInventoryUI;
-    private StatsUpUI statsUpUI;
 
     private Json json;
     private MapManager mapManager;
@@ -356,7 +355,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
     }
 
     private void createStatsUpUI(int nbrLevelUp) {
-        statsUpUI = new StatsUpUI(nbrLevelUp);
+        StatsUpUI statsUpUI = new StatsUpUI(nbrLevelUp);
         statsUpUI.setPosition(battleHUDStage.getWidth() / 4, battleHUDStage.getHeight() / 4);
         statsUpUI.setKeepWithinStage(false);
         statsUpUI.setWidth(battleHUDStage.getWidth() / 2);
