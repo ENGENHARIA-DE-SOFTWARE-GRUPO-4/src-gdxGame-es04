@@ -63,8 +63,6 @@ public class AudioManager implements AudioObserver {
                     musicStop.stop();
                 }
             }
-            default -> {
-            }
         }
     }
 
