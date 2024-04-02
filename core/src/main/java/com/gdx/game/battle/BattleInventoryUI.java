@@ -107,9 +107,11 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static void clearInventoryItems(Table targetTable) {
-        Array<Cell> cells = targetTable.getCells();
+        Array<?> cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot = (InventorySlot)cells.get(i).getActor();
+            Cell<?> cell = (Cell<?>) cells.get(i);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot = (InventorySlot)tempCell.getActor();
             if (inventorySlot == null) {
                 continue;
             }
@@ -118,10 +120,12 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> removeInventoryItems(String name, Table inventoryTable) {
-        Array<Cell> cells = inventoryTable.getCells();
+        Array<?> cells = inventoryTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
+            Cell<?> cell = (Cell<?>) cells.get(i);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot =  ((InventorySlot)tempCell.getActor());
             if (inventorySlot == null) {
                 continue;
             }
@@ -157,10 +161,12 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> getInventory(Table targetTable) {
-        Array<Cell> cells = targetTable.getCells();
+        Array<?> cells = targetTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
+            Cell<?> cell = (Cell<?>) cells.get(i);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot =  ((InventorySlot)tempCell.getActor());
             if (inventorySlot == null) {
                 continue;
             }
@@ -174,10 +180,12 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> getInventoryFiltered(Table targetTable, String filterOutName) {
-        Array<Cell> cells = targetTable.getCells();
+        Array<?> cells = targetTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
+            Cell<?> cell = (Cell<?>) cells.get(i);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot =  ((InventorySlot)tempCell.getActor());
             if (inventorySlot == null || inventorySlot.getNumItems() == 0) {
                 continue;
             }
@@ -192,10 +200,12 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> getInventory(Table targetTable, String name) {
-        Array<Cell> cells = targetTable.getCells();
+        Array<?> cells = targetTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
+            Cell<?> cell = (Cell<?>) cells.get(i);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot =  ((InventorySlot)tempCell.getActor());
             if (inventorySlot == null) {
                 continue;
             }
@@ -236,9 +246,11 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
 
     public static void setInventoryItemNames(Table targetTable, String name) {
-        Array<Cell> cells = targetTable.getCells();
+        Array<?> cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
+            Cell<?> cell = (Cell<?>) cells.get(i);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot =  ((InventorySlot)tempCell.getActor());
             if (inventorySlot == null) {
                 continue;
             }
