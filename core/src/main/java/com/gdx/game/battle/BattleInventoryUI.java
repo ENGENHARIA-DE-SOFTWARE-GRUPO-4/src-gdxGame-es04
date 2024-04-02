@@ -299,9 +299,11 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public void removeQuestItemFromInventory(String questID) {
-        Array<Cell> sourceCells = inventorySlotTable.getCells();
+        Array<?> sourceCells = inventorySlotTable.getCells();
         for(int index = 0; index < sourceCells.size; index++) {
-            InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
+            Cell<?> cell = (Cell<?>) sourceCells.get(index);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot = ((InventorySlot) tempCell.getActor());
             if (inventorySlot == null) {
                 continue;
             }
