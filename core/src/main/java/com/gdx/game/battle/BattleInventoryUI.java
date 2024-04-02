@@ -304,16 +304,14 @@ public class BattleInventoryUI extends Window implements InventorySubject {
             Cell<?> cell = (Cell<?>) sourceCells.get(index);
             Cell<?> tempCell = cell;
             InventorySlot inventorySlot = ((InventorySlot) tempCell.getActor());
-            if (inventorySlot == null) {
-                continue;
-            }
-            InventoryItem item = inventorySlot.getTopInventoryItem();
-            if (item == null) {
-                continue;
-            }
-            String inventoryItemName = item.getName();
-            if (inventoryItemName != null && inventoryItemName.equals(questID)) {
-                inventorySlot.clearAllInventoryItems(false);
+            if (inventorySlot != null) {
+                InventoryItem item = inventorySlot.getTopInventoryItem();
+                if (item != null) {
+                    String inventoryItemName = item.getName();
+                    if (inventoryItemName != null && inventoryItemName.equals(questID)) {
+                        inventorySlot.clearAllInventoryItems(false);
+                    }
+                }
             }
         }
     }
