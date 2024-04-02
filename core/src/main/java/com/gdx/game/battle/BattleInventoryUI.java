@@ -220,12 +220,14 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
     public static Array<InventoryItemLocation> getInventoryFiltered(Table sourceTable, Table targetTable, String filterOutName) {
         Array<InventoryItemLocation> items = getInventoryFiltered(targetTable, filterOutName);
-        Array<Cell> sourceCells = sourceTable.getCells();
+        Array<?> sourceCells = sourceTable.getCells();
         int index = 0;
         boolean shouldBreak = false;
         for(InventoryItemLocation item : items) {
             for(; index < sourceCells.size && !shouldBreak; index++) {
-                InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
+                Cell<?> cell = (Cell<?>) sourceCells.get(index);
+                Cell<?> tempCell = cell;
+                InventorySlot inventorySlot = ((InventorySlot) tempCell.getActor());
                 if (inventorySlot == null) {
                     continue;
                 }
