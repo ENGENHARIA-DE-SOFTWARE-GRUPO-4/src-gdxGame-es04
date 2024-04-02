@@ -212,8 +212,9 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         Array<InventoryItemLocation> items = getInventoryFiltered(targetTable, filterOutName);
         Array<Cell> sourceCells = sourceTable.getCells();
         int index = 0;
+        boolean shouldBreak = false;
         for(InventoryItemLocation item : items) {
-            for(; index < sourceCells.size; index++) {
+            for(; index < sourceCells.size && !shouldBreak; index++) {
                 InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
                 if (inventorySlot == null) {
                     continue;
@@ -222,12 +223,13 @@ public class BattleInventoryUI extends Window implements InventorySubject {
                 if (numItems == 0) {
                     item.setLocationIndex(index);
                     index++;
-                    break;
+                    shouldBreak = true;
                 }
             }
             if (index == sourceCells.size) {
                 item.setLocationIndex(index-1);
             }
+            shouldBreak = false;
         }
         return items;
     }
