@@ -259,11 +259,13 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public boolean doesInventoryHaveSpace() {
-        Array<Cell> sourceCells = inventorySlotTable.getCells();
+        Array<?> sourceCells = inventorySlotTable.getCells();
         int index = 0;
 
         for(; index < sourceCells.size; index++) {
-            InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
+            Cell<?> cell = (Cell<?>) sourceCells.get(index);
+            Cell<?> tempCell = cell;
+            InventorySlot inventorySlot = ((InventorySlot) tempCell.getActor());
             if (inventorySlot == null) {
                 continue;
             }
