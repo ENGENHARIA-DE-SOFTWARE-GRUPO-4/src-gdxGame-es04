@@ -99,6 +99,21 @@ class AudioManagerTest {
 
     }
 
+    @Test
+    public void testOnNotifyMusicStopAll() {
+        new ResourceManager();
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, TOPPLE_THEME);
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, MENU_THEME);
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, TOPPLE_THEME);
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, MENU_THEME);
+        assertNotEquals(audioManager.getCurrentMusic(), null);
+
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_STOP_ALL, null);
+
+        assertThat(audioManager.getCurrentMusic().isPlaying()).isFalse();
+    }
+
     
 
 }
