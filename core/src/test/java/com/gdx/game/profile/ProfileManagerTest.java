@@ -3,6 +3,7 @@ package com.gdx.game.profile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.gdx.game.profile.ProfileManager.DEFAULT_PROFILE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(GdxRunner.class)
@@ -66,4 +68,24 @@ public class ProfileManagerTest {
 
         Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
     }
+
+    @Test
+    public void testGetProfileListNotEmpty() {
+        ProfileManager profileManager = new ProfileManager();
+        profileManager.saveProfile();
+        Array<String> profiles = profileManager.getProfileList();
+
+        assertFalse(profiles.isEmpty());
+
+        Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
+    }
+
+    @Test
+    public void testGetProfileListEmpty() {
+        ProfileManager profileManager = new ProfileManager();
+        Array<String> profiles = profileManager.getProfileList();
+        
+        assertTrue(profiles.isEmpty());
+    }
+
 }
