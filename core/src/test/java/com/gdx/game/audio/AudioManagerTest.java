@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.MENU_THEME;
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.TOPPLE_THEME;
+import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.NONE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -112,6 +113,16 @@ class AudioManagerTest {
         audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_STOP_ALL, null);
 
         assertThat(audioManager.getCurrentMusic().isPlaying()).isFalse();
+    }
+
+    @Test
+    public void testOnNotifyMusicNotLoaded(){
+        new ResourceManager();
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, NONE);
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, NONE);
+
+        assertEquals(audioManager.getCurrentMusic(), null);
     }
 
     
