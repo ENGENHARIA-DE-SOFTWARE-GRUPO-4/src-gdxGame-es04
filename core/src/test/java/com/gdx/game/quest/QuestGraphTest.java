@@ -12,6 +12,7 @@ import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,6 +23,9 @@ import org.mockito.MockedConstruction;
 import java.util.Hashtable;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
@@ -31,8 +35,14 @@ public class QuestGraphTest {
 
     private MockedConstruction<NPCGraphicsComponent> mockNPCGraphics;
 
+    private QuestGraph questGraph;
+
+    private QuestTask questTask;
+
     @BeforeEach
     void init() {
+        questGraph = new QuestGraph();
+        questTask = new QuestTask();
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
         mockNPCGraphics = mockConstruction(NPCGraphicsComponent.class);
@@ -40,13 +50,13 @@ public class QuestGraphTest {
 
     @AfterEach
     void end() {
+        questGraph = null;
+        questTask = null;
         mockNPCGraphics.close();
     }
 
     @Test
     public void testIsValid_ShouldSucceed() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
         questTask.setId("1");
         questTask.setPropertyValue("1", "test");
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
@@ -60,7 +70,6 @@ public class QuestGraphTest {
 
     @Test
     public void testIsValid_ShouldSucceedWithNullValue() {
-        QuestGraph questGraph = new QuestGraph();
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
         questGraph.setTasks(questTasks);
 
@@ -96,8 +105,6 @@ public class QuestGraphTest {
 
     @Test
     public void testDoesCycleExist_ShouldSucceedReturnFalse() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
@@ -114,8 +121,6 @@ public class QuestGraphTest {
 
     @Test
     public void testDoesQuestTaskHaveDependencies_ShouldSucceedWithWrongId() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
@@ -129,8 +134,6 @@ public class QuestGraphTest {
 
     @Test
     public void testDoesQuestTaskHaveDependencies_ShouldSucceedReturnFalse() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
@@ -239,8 +242,6 @@ public class QuestGraphTest {
         mapManager.loadMap(MapFactory.MapType.TOPPLE);
         ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
 
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
@@ -264,8 +265,6 @@ public class QuestGraphTest {
         mapManager.loadMap(MapFactory.MapType.TOPPLE);
         ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
 
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
@@ -279,4 +278,54 @@ public class QuestGraphTest {
 
         assertThat(ProfileManager.getInstance().getProperty("TOWN_INNKEEPER", Array.class)).isEmpty();
     }
+
+    @Test
+    public void testReachableTaskTC01() {
+        // Arrange
+        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
+        questTaskDependency1.setSourceId("1");
+        questTaskDependency1.setDestinationId("2");
+        questGraph.addDependency(questTaskDependency1);
+        // Act
+        boolean isReachable = questGraph.isReachable(
+                questTaskDependency1.getSourceId(),
+                questTaskDependency1.getDestinationId()
+        );
+        // Arrange
+        assertTrue(isReachable);
+    }
+
+    @Test
+    public void testReachableTaskTC02() {
+        // Arrange
+        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
+        questTaskDependency1.setSourceId("1");
+        questTaskDependency1.setDestinationId("2");
+        QuestTaskDependency questTaskDependency2 = new QuestTaskDependency();
+        questTaskDependency2.setSourceId("2");
+        questTaskDependency2.setSourceId("3");
+        questGraph.addDependency(questTaskDependency1);
+        questGraph.addDependency(questTaskDependency2);
+        // Act
+        boolean isReachable = questGraph.isReachable(
+                questTaskDependency1.getSourceId(),
+                questTaskDependency2.getDestinationId()
+        );
+        // Assert
+        assertTrue(isReachable);
+    }
+
+    @Test
+    public void testNotReachableTask() {
+        // Arrange
+        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
+        questTaskDependency1.setSourceId("1");
+        questTaskDependency1.setDestinationId("2");
+        questGraph.addDependency(questTaskDependency1);
+        // Act
+        boolean isReachable = questGraph.isReachable("1", "200");
+        // Arrange
+        assertFalse(isReachable);
+    }
+
 }
