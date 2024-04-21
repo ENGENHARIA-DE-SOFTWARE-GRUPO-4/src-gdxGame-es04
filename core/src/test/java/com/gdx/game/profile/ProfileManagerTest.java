@@ -101,4 +101,16 @@ public class ProfileManagerTest {
         assertFalse(profileManager.doesProfileExist("nonexistent"));
     }
 
+    @Test
+    public void testSetPropertyAndGetProperties() {
+        ProfileManager profileManager = new ProfileManager();
+        String key = "testKey";
+        String value = "testValue";
+
+        profileManager.setProperty(key, value);
+
+        String retrievedValue = profileManager.getProperty(key, String.class);
+        assertEquals(value, retrievedValue);
+    }
+
 }
