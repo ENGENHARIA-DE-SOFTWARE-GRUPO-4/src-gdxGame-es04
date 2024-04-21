@@ -270,4 +270,8 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     public int getNumItemsVal() {
         return numItemsVal;
     }
+
+    public void setNumItemsVal(int numItemsVal) {
+        this.numItemsVal = numItemsVal;
+    }
 }

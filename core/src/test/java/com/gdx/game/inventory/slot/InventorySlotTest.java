@@ -35,11 +35,25 @@ public class InventorySlotTest {
     }
 
     @Test
-    void testHasItem_SlotWithItems() {
+    void testHasItem_SlotWithOneItem() {
         InventorySlot inventorySlot = new InventorySlot();
         Actor actor = new Actor();
         inventorySlot.add(actor);
         
+        boolean hasItem = inventorySlot.hasItem();
+
+        assertTrue(hasItem);
+    }
+
+    @Test
+    void testHasItem_SlotWithItems() {
+        InventorySlot inventorySlot = new InventorySlot();
+        Actor actor = new Actor();
+        Actor anotherActor = new Actor();
+
+        inventorySlot.add(actor);
+        inventorySlot.add(anotherActor);
+
         boolean hasItem = inventorySlot.hasItem();
 
         assertTrue(hasItem);
@@ -173,5 +187,54 @@ public class InventorySlotTest {
         inventorySlot.remove(actor);
 
         assertEquals(initialItemCount, inventorySlot.getNumItems());
+    }
+
+    @Test
+    void testIncrementItemCount_ItemExists() {
+        InventorySlot inventorySlot = new InventorySlot();
+        int initialItemCount = inventorySlot.getNumItems();
+
+        inventorySlot.incrementItemCount(false);
+
+        String labelText = inventorySlot.getNumItemsLabel().getText().toString();
+        int itemCountAfterIncrement = Integer.parseInt(labelText);
+
+        assertEquals(initialItemCount + 1, inventorySlot.getNumItemsVal());
+        assertEquals(initialItemCount + 1, itemCountAfterIncrement);
+    }
+
+    @Test
+    void testIncrementItemCount_NotificationEnabled() {
+        InventorySlot inventorySlot = new InventorySlot();
+        TestObserver observer = new TestObserver();
+        inventorySlot.addObserver(observer);
+        
+        inventorySlot.incrementItemCount(true);
+        
+        assertTrue(observer.isNotified());
+    }
+
+    @Test
+    void testIncrementItemCount_NotificationDisabled() {
+        InventorySlot inventorySlot = new InventorySlot();
+        TestObserver observer = new TestObserver();
+        inventorySlot.addObserver(observer);
+        
+        inventorySlot.incrementItemCount(false);
+        
+        assertFalse(observer.isNotified());
+    }
+}
+
+class TestObserver implements InventorySlotObserver {
+    private boolean notified = false;
+    
+    @Override
+    public void onNotify(final InventorySlot slot, final SlotEvent event) {
+        notified = true;
+    }
+
+    public boolean isNotified() {
+        return notified;
     }
 }
