@@ -88,4 +88,17 @@ public class ProfileManagerTest {
         assertTrue(profiles.isEmpty());
     }
 
+    @Test
+    public void testDoesProfileExist() {
+        ProfileManager profileManager = new ProfileManager();
+        profileManager.saveProfile();
+        assertTrue(profileManager.doesProfileExist(ProfileManager.DEFAULT_PROFILE));
+    }
+
+    @Test
+    public void testDoesProfileNotExist() {
+        ProfileManager profileManager = new ProfileManager();
+        assertFalse(profileManager.doesProfileExist("nonexistent"));
+    }
+
 }
