@@ -35,7 +35,7 @@ public class InventorySlotTest {
     }
 
     @Test
-    public void testHasItem_SlotWithItems() {
+    void testHasItem_SlotWithItems() {
         InventorySlot inventorySlot = new InventorySlot();
         Actor actor = new Actor();
         inventorySlot.add(actor);
@@ -46,7 +46,7 @@ public class InventorySlotTest {
     }
 
     @Test
-    public void testHasItem_EmptySlot() {
+    void testHasItem_EmptySlot() {
         InventorySlot inventorySlot = new InventorySlot();
         
         boolean hasItem = inventorySlot.hasItem();
@@ -55,7 +55,7 @@ public class InventorySlotTest {
     }
 
     @Test
-    public void testAdd_ValidActor() {
+    void testAdd_ValidActor() {
         InventorySlot inventorySlot = new InventorySlot();
         int initialItemCount = inventorySlot.getNumItems();
 
@@ -65,12 +65,12 @@ public class InventorySlotTest {
         String labelText = inventorySlot.getNumItemsLabel().getText().toString();
         int itemCountAfterAdd = Integer.parseInt(labelText);
 
-        assertEquals(initialItemCount + 1, inventorySlot.getNumItems());
+        assertEquals(initialItemCount + 1, inventorySlot.getNumItemsVal());
         assertEquals(initialItemCount + 1, itemCountAfterAdd);
     }
 
     @Test
-    public void testAdd_DefaultBackground() {
+    void testAdd_DefaultBackground() {
         InventorySlot inventorySlot = new InventorySlot();
         int initialItemCount = inventorySlot.getNumItems();
 
@@ -80,12 +80,12 @@ public class InventorySlotTest {
         String labelText = inventorySlot.getNumItemsLabel().getText().toString();
         int itemCountAfterAdd = Integer.parseInt(labelText);
 
-        assertEquals(initialItemCount, inventorySlot.getNumItems());
+        assertEquals(initialItemCount, inventorySlot.getNumItemsVal());
         assertEquals(initialItemCount, itemCountAfterAdd);
     }
 
     @Test
-    public void testAdd_NumItemsLabel() {
+    void testAdd_NumItemsLabel() {
         InventorySlot inventorySlot = new InventorySlot();
         int initialItemCount = inventorySlot.getNumItems();
         
@@ -95,19 +95,82 @@ public class InventorySlotTest {
         String labelText = inventorySlot.getNumItemsLabel().getText().toString();
         int itemCountAfterAdd = Integer.parseInt(labelText);
 
-        assertEquals(initialItemCount, inventorySlot.getNumItems());
+        assertEquals(initialItemCount, inventorySlot.getNumItemsVal());
         assertEquals(initialItemCount, itemCountAfterAdd);
     }
 
     @Test
-    public void testAdd_NumItemsLabelNull() {
+    void testAdd_NumItemsLabelNull() {
         InventorySlot inventorySlot = new InventorySlot();
         inventorySlot.setNumItemsLabel(null);
+
+        assertNull(inventorySlot.getNumItemsLabel());
 
         int initialItemCount = inventorySlot.getNumItems();
         
         Actor actor = new Actor();
         inventorySlot.add(actor);
+
+        assertEquals(initialItemCount, inventorySlot.getNumItemsVal());
+    }
+
+    @Test
+    void testRemove_ExistingActor() {
+        InventorySlot inventorySlot = new InventorySlot();
+        Actor actor = new Actor();
+        inventorySlot.add(actor);
+        int initialItemCount = inventorySlot.getNumItems();
+
+        inventorySlot.remove(actor);
+        
+        String labelText = inventorySlot.getNumItemsLabel().getText().toString();
+        int itemCountAfterRemove = Integer.parseInt(labelText);
+
+        assertEquals(initialItemCount - 1, inventorySlot.getNumItemsVal());
+        assertEquals(initialItemCount - 1, itemCountAfterRemove);
+    }
+
+    @Test
+    void testRemove_DefaultBackground() {
+        InventorySlot inventorySlot = new InventorySlot();
+        int initialItemCount = inventorySlot.getNumItems();
+        
+        Stack defaultBackground = inventorySlot.getDefaultBackground();
+        inventorySlot.remove(defaultBackground);
+        
+        String labelText = inventorySlot.getNumItemsLabel().getText().toString();
+        int itemCountAfterRemove = Integer.parseInt(labelText);
+
+        assertEquals(initialItemCount, inventorySlot.getNumItemsVal());
+        assertEquals(initialItemCount, itemCountAfterRemove);
+    }
+
+    @Test
+    void testRemove_NumItemsLabel() {
+        InventorySlot inventorySlot = new InventorySlot();
+        Actor actor = inventorySlot.getNumItemsLabel();
+        inventorySlot.add(actor);
+        int initialItemCount = inventorySlot.getNumItems();
+        
+        inventorySlot.remove(actor);
+
+        String labelText = inventorySlot.getNumItemsLabel().getText().toString();
+        int itemCountAfterRemove = Integer.parseInt(labelText);
+
+        assertEquals(initialItemCount, inventorySlot.getNumItemsVal());
+        assertEquals(initialItemCount, itemCountAfterRemove);
+    }
+
+    @Test
+    void testRemove_NumItemsLabelNull() {
+        InventorySlot inventorySlot = new InventorySlot();
+        inventorySlot.setNumItemsLabel(null);
+        Actor actor = new Actor();
+        int initialItemCount = inventorySlot.getNumItems();
+
+        assertNull(inventorySlot.getNumItemsLabel());
+
+        inventorySlot.remove(actor);
 
         assertEquals(initialItemCount, inventorySlot.getNumItems());
     }

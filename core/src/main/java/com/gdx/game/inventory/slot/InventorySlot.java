@@ -266,4 +266,8 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     public Stack getDefaultBackground() {
         return defaultBackground;
     }
+
+    public int getNumItemsVal() {
+        return numItemsVal;
+    }
 }
