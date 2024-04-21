@@ -224,6 +224,44 @@ public class InventorySlotTest {
         
         assertFalse(observer.isNotified());
     }
+
+    @Test
+    void testDecrementItemCount_ItemExists() {
+        InventorySlot inventorySlot = new InventorySlot();
+        Actor actor = new Actor();
+        inventorySlot.add(actor);
+        int initialItemCount = inventorySlot.getNumItems();
+
+        inventorySlot.decrementItemCount(false);
+
+        String labelText = inventorySlot.getNumItemsLabel().getText().toString();
+        int itemCountAfterDecrement = Integer.parseInt(labelText);
+
+        assertEquals(initialItemCount - 1, inventorySlot.getNumItemsVal());
+        assertEquals(initialItemCount - 1, itemCountAfterDecrement);
+    }
+
+    @Test
+    void testDecrementItemCount_NotificationEnabled() {
+        InventorySlot inventorySlot = new InventorySlot();
+        TestObserver observer = new TestObserver();
+        inventorySlot.addObserver(observer);
+        
+        inventorySlot.decrementItemCount(true);
+        
+        assertTrue(observer.isNotified());
+    }
+
+    @Test
+    void testDecrementItemCount_NotificationDisabled() {
+        InventorySlot inventorySlot = new InventorySlot();
+        TestObserver observer = new TestObserver();
+        inventorySlot.addObserver(observer);
+        
+        inventorySlot.decrementItemCount(false);
+        
+        assertFalse(observer.isNotified());
+    }
 }
 
 class TestObserver implements InventorySlotObserver {
