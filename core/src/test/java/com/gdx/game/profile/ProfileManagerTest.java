@@ -142,4 +142,11 @@ public class ProfileManagerTest {
         profile2File.delete();
     }
 
+    @Test
+    public void testStoreAllProfilesWithNoExistingProfiles() {
+        ProfileManager profileManager = new ProfileManager();
+        profileManager.storeAllProfiles();
+        assertEquals(0, profileManager.getProfileList().size);
+    }
+
 }
