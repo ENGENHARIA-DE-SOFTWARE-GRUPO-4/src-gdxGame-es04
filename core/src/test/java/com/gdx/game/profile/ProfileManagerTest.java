@@ -1,6 +1,8 @@
 package com.gdx.game.profile;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessFiles;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -119,6 +121,25 @@ public class ProfileManagerTest {
         assertFalse(profileManager.getIsNewProfile());
         profileManager.setIsNewProfile(true);
         assertTrue(profileManager.getIsNewProfile());
+    }
+
+    @Test
+    public void testStoreAllProfilesWithExistingProfiles() {
+        ProfileManager profileManager = new ProfileManager();
+        Gdx.files = new HeadlessFiles();
+
+        FileHandle profile1File = Gdx.files.local("profile1.sav");
+        FileHandle profile2File = Gdx.files.local("profile2.sav");
+        profile1File.writeString("", false);
+        profile2File.writeString("", false);
+
+        profileManager.storeAllProfiles();
+
+        assertTrue(profileManager.getProfileList().contains("profile1", false));
+        assertTrue(profileManager.getProfileList().contains("profile2", false));
+
+        profile1File.delete();
+        profile2File.delete();
     }
 
 }
