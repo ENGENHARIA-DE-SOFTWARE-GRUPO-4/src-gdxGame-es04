@@ -113,4 +113,12 @@ public class ProfileManagerTest {
         assertEquals(value, retrievedValue);
     }
 
+    @Test
+    public void testSetAndGetIsNewProfile() {
+        ProfileManager profileManager = new ProfileManager();
+        assertFalse(profileManager.getIsNewProfile());
+        profileManager.setIsNewProfile(true);
+        assertTrue(profileManager.getIsNewProfile());
+    }
+
 }
