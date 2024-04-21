@@ -254,4 +254,16 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
             observer.onNotify(slot, event);
         }
     }
+
+    public Label getNumItemsLabel() {
+        return numItemsLabel;
+    }
+    
+    public void setNumItemsLabel(Label numItemsLabel) {
+        this.numItemsLabel = numItemsLabel;
+    }
+
+    public Stack getDefaultBackground() {
+        return defaultBackground;
+    }
 }
