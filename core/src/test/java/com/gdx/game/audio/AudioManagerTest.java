@@ -78,4 +78,14 @@ class AudioManagerTest {
         assertEquals(audioManager.getCurrentMusic(), expectedMusic);
     }
 
+    @Test
+    public void testOnNotifyMusicPlayOnce() {
+        new ResourceManager();
+        AudioManager audioManager = AudioManager.getInstance();
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, MENU_THEME);
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, MENU_THEME);
+
+        assertThat(audioManager.getCurrentMusic()).isNotNull();
+    }
+
 }
