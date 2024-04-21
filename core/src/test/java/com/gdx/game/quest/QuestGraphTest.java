@@ -291,7 +291,7 @@ public class QuestGraphTest {
                 questTaskDependency1.getSourceId(),
                 questTaskDependency1.getDestinationId()
         );
-        // Arrange
+        // Assert
         assertTrue(isReachable);
     }
 
@@ -324,7 +324,7 @@ public class QuestGraphTest {
         questGraph.addDependency(questTaskDependency1);
         // Act
         boolean isReachable = questGraph.isReachable("1", "200");
-        // Arrange
+        // Assert
         assertFalse(isReachable);
     }
 
