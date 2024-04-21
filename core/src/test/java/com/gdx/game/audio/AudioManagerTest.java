@@ -1,6 +1,7 @@
 package com.gdx.game.audio;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.manager.ResourceManager;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.MENU_THEME;
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.TOPPLE_THEME;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(GdxRunner.class)
@@ -65,4 +67,15 @@ class AudioManagerTest {
 
         assertThat(audioManager.getCurrentMusic().isPlaying()).isFalse();
     }
+
+    @Test
+    void testGetCurrentMusic_ShouldReturnCorrectMusic() {
+        new ResourceManager();
+        AudioManager audioManager = AudioManager.getInstance();
+        Music expectedMusic = ResourceManager.getMusicAsset(MENU_THEME.getValue());
+        audioManager.setCurrentMusic(expectedMusic);
+    
+        assertEquals(audioManager.getCurrentMusic(), expectedMusic);
+    }
+
 }
