@@ -125,10 +125,7 @@ public class QuestGraph {
     }
 
     public QuestTask getQuestTaskByID(String id) {
-        if (!isValid(id)) {
-            return null;
-        }
-        return questTasks.get(id);
+        return (isValid(id)) ? questTasks.get(id) : null;
     }
 
     public void addDependency(String sourceId, String destinationId) {
