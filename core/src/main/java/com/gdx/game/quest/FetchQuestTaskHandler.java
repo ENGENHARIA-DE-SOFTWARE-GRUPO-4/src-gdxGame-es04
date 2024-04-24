@@ -31,34 +31,33 @@ public class FetchQuestTaskHandler implements QuestTaskHandler {
 
     @Override
     public void handleInit(MapManager mapManager, QuestTask questTask, String questID) {
+
+        String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
+        if (taskConfig == null || taskConfig.isEmpty())
+            return;
+
         Array<Entity> questEntities = new Array<>();
         Array<Vector2> positions = mapManager.getQuestItemSpawnPositions(questID, questTask.getId());
-        String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-        if (taskConfig == null || taskConfig.isEmpty()) {
-            return;
-        }
         EntityConfig config = Entity.getEntityConfig(taskConfig);
-
         Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
 
         if (questItemPositions == null) {
-            questItemPositions = new Array<>();
-            for(Vector2 position: positions) {
-                questItemPositions.add(position);
-                Entity entity = Entity.initEntity(config, position);
-                entity.getEntityConfig().setCurrentQuestID(questID);
-                questEntities.add(entity);
-            }
+            questItemPositions = new Array<>(positions);
+            addQuestEntities(config, positions, questID, questEntities);
         } else {
-            for(Vector2 questItemPosition: questItemPositions) {
-                Entity entity = Entity.initEntity(config, questItemPosition);
-                entity.getEntityConfig().setCurrentQuestID(questID);
-                questEntities.add(entity);
-            }
+            addQuestEntities(config, positions, questID, questEntities);
         }
 
         mapManager.addMapQuestEntities(questEntities);
         ProfileManager.getInstance().setProperty(config.getEntityID(), questItemPositions);
+    }
+
+    private void addQuestEntities(EntityConfig config, Array<Vector2> positions, String questID, Array<Entity> questEntities) {
+        for (Vector2 position : positions) {
+            Entity entity = Entity.initEntity(config, position);
+            entity.getEntityConfig().setCurrentQuestID(questID);
+            questEntities.add(entity);
+        }
     }
 
 }
