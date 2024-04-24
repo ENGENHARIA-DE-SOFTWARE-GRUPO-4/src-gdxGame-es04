@@ -172,53 +172,29 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete()) {
+            if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
                 continue;
-            }
-
-            //We first want to make sure the task is available and is relevant to current location
-            if (!isQuestTaskAvailable(questTask.getId())) {
-                continue;
-            }
 
             String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
             if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
                 continue;
             }
 
-            switch(questTask.getQuestType()) {
-                case FETCH:
-                    String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-                    if (taskConfig == null || taskConfig.isEmpty()) {
-                        break;
-                    }
-                    EntityConfig config = Entity.getEntityConfig(taskConfig);
+            // Determine the handler based on quest type
+            QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
+            if (handler != null)
+                handler.handle(questTask, questID);
+            else
+                break;
+        }
+    }
 
-                    Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
-                    if (questItemPositions == null) {
-                        break;
-                    }
-
-                    //Case where all the items have been picked up
-                    if (questItemPositions.size == 0) {
-                        questTask.setTaskComplete();
-                        LOGGER.debug("TASK : {} is complete of Quest: {}", questTask.getId(), questID);
-                        LOGGER.debug("INFO : {}", QuestTask.QuestTaskPropertyType.TARGET_TYPE);
-                    }
-                    break;
-                case KILL:
-                    break;
-                case DELIVERY:
-                    break;
-                case GUARD:
-                    break;
-                case ESCORT:
-                    break;
-                case RETURN:
-                    break;
-                case DISCOVER:
-                    break;
-            }
+    private QuestTaskHandler getHandlerForQuestType(QuestTask.QuestType questType) {
+        switch (questType) {
+            case FETCH:
+                return new FetchQuestTaskHandler();
+            default:
+                return null;
         }
     }
 
