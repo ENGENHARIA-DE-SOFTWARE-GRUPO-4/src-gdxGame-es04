@@ -1,20 +1,11 @@
 package com.gdx.game.quest;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.gdx.game.entities.Entity;
-import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.map.MapManager;
-import com.gdx.game.profile.ProfileManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class QuestGraph {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
 
     private Hashtable<String, QuestTask> questTasks;
 
