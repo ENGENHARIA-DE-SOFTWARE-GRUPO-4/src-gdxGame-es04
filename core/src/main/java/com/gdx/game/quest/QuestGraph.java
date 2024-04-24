@@ -71,20 +71,6 @@ public class QuestGraph {
         return questTitle;
     }
 
-    public void setQuestTitle(String questTitle) {
-        this.questTitle = questTitle;
-    }
-
-    public boolean areAllTasksComplete() {
-        ArrayList<QuestTask> tasks = getAllQuestTasks();
-        for(QuestTask task: tasks) {
-            if (!task.isTaskComplete()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void setTasks(Hashtable<String, QuestTask> questTasks) {
 
         this.questTasks = questTasks;
@@ -139,7 +125,6 @@ public class QuestGraph {
             return false;
         }
         ArrayList<String> list = questTaskDependencies.get(id);
-
         return !list.isEmpty();
     }
 
