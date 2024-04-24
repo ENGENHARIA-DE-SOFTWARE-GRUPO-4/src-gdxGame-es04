@@ -183,7 +183,7 @@ public class QuestGraph {
             // Determine the handler based on quest type
             QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
             if (handler != null)
-                handler.handle(questTask, questID);
+                handler.handleUpdate(questTask, questID);
             else
                 break;
         }
@@ -202,14 +202,8 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete()) {
+            if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
                 continue;
-            }
-
-            //We first want to make sure the task is available and is relevant to current location
-            if (!isQuestTaskAvailable(questTask.getId())) {
-                continue;
-            }
 
             String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
             if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {

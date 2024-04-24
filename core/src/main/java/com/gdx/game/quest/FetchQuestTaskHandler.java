@@ -13,7 +13,7 @@ public class FetchQuestTaskHandler implements QuestTaskHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
 
     @Override
-    public void handle(QuestTask questTask, String questID) {
+    public void handleUpdate(QuestTask questTask, String questID) {
         String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
         if (taskConfig == null || taskConfig.isEmpty())
             return;
