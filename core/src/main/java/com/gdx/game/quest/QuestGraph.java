@@ -210,50 +210,11 @@ public class QuestGraph {
                 continue;
             }
 
-            switch(questTask.getQuestType()) {
-                case FETCH:
-                    Array<Entity> questEntities = new Array<>();
-                    Array<Vector2> positions = mapMgr.getQuestItemSpawnPositions(questID, questTask.getId());
-                    String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-                    if (taskConfig == null || taskConfig.isEmpty()) {
-                        break;
-                    }
-                    EntityConfig config = Entity.getEntityConfig(taskConfig);
-
-                    Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
-
-                    if (questItemPositions == null) {
-                        questItemPositions = new Array<>();
-                        for(Vector2 position: positions) {
-                            questItemPositions.add(position);
-                            Entity entity = Entity.initEntity(config, position);
-                            entity.getEntityConfig().setCurrentQuestID(questID);
-                            questEntities.add(entity);
-                        }
-                    } else {
-                        for(Vector2 questItemPosition: questItemPositions) {
-                            Entity entity = Entity.initEntity(config, questItemPosition);
-                            entity.getEntityConfig().setCurrentQuestID(questID);
-                            questEntities.add(entity);
-                        }
-                    }
-
-                    mapMgr.addMapQuestEntities(questEntities);
-                    ProfileManager.getInstance().setProperty(config.getEntityID(), questItemPositions);
-                    break;
-                case KILL:
-                    break;
-                case DELIVERY:
-                    break;
-                case GUARD:
-                    break;
-                case ESCORT:
-                    break;
-                case RETURN:
-                    break;
-                case DISCOVER:
-                    break;
-            }
+            QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
+            if (handler != null)
+                handler.handleInit(mapMgr, questTask, questID);
+            else
+                break;
         }
     }
 

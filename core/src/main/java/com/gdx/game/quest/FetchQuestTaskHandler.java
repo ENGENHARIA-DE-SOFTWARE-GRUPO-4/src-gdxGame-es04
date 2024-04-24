@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,38 @@ public class FetchQuestTaskHandler implements QuestTaskHandler {
             LOGGER.debug("TASK : {} is complete of Quest: {}", questTask.getId(), questID);
             LOGGER.debug("INFO : {}", QuestTask.QuestTaskPropertyType.TARGET_TYPE);
         }
+    }
+
+    @Override
+    public void handleInit(MapManager mapManager, QuestTask questTask, String questID) {
+        Array<Entity> questEntities = new Array<>();
+        Array<Vector2> positions = mapManager.getQuestItemSpawnPositions(questID, questTask.getId());
+        String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
+        if (taskConfig == null || taskConfig.isEmpty()) {
+            return;
+        }
+        EntityConfig config = Entity.getEntityConfig(taskConfig);
+
+        Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
+
+        if (questItemPositions == null) {
+            questItemPositions = new Array<>();
+            for(Vector2 position: positions) {
+                questItemPositions.add(position);
+                Entity entity = Entity.initEntity(config, position);
+                entity.getEntityConfig().setCurrentQuestID(questID);
+                questEntities.add(entity);
+            }
+        } else {
+            for(Vector2 questItemPosition: questItemPositions) {
+                Entity entity = Entity.initEntity(config, questItemPosition);
+                entity.getEntityConfig().setCurrentQuestID(questID);
+                questEntities.add(entity);
+            }
+        }
+
+        mapManager.addMapQuestEntities(questEntities);
+        ProfileManager.getInstance().setProperty(config.getEntityID(), questItemPositions);
     }
 
 }
