@@ -104,22 +104,6 @@ public class QuestGraphTest {
     }
 
     @Test
-    public void testDoesCycleExist_ShouldSucceedReturnFalse() {
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
-        questTaskDependency.setSourceId("1");
-        questTaskDependency.setDestinationId("1");
-
-        boolean doesCycleExist = questGraph.doesCycleExist(questTaskDependency);
-
-        assertThat(doesCycleExist).isFalse();
-    }
-
-    @Test
     public void testDoesQuestTaskHaveDependencies_ShouldSucceedWithWrongId() {
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
@@ -282,15 +266,9 @@ public class QuestGraphTest {
     @Test
     public void testReachableTaskTC01() {
         // Arrange
-        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
-        questTaskDependency1.setSourceId("1");
-        questTaskDependency1.setDestinationId("2");
-        questGraph.addDependency(questTaskDependency1);
+        questGraph.addDependency("1", "2");
         // Act
-        boolean isReachable = questGraph.isReachable(
-                questTaskDependency1.getSourceId(),
-                questTaskDependency1.getDestinationId()
-        );
+        boolean isReachable = questGraph.isReachable("1", "2");
         // Assert
         assertTrue(isReachable);
     }
@@ -298,19 +276,10 @@ public class QuestGraphTest {
     @Test
     public void testReachableTaskTC02() {
         // Arrange
-        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
-        questTaskDependency1.setSourceId("1");
-        questTaskDependency1.setDestinationId("2");
-        QuestTaskDependency questTaskDependency2 = new QuestTaskDependency();
-        questTaskDependency2.setSourceId("2");
-        questTaskDependency2.setSourceId("3");
-        questGraph.addDependency(questTaskDependency1);
-        questGraph.addDependency(questTaskDependency2);
+        questGraph.addDependency("1", "2");
+        questGraph.addDependency("2", "3");
         // Act
-        boolean isReachable = questGraph.isReachable(
-                questTaskDependency1.getSourceId(),
-                questTaskDependency2.getDestinationId()
-        );
+        boolean isReachable = questGraph.isReachable("1", "3");
         // Assert
         assertTrue(isReachable);
     }
@@ -318,10 +287,7 @@ public class QuestGraphTest {
     @Test
     public void testNotReachableTask() {
         // Arrange
-        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
-        questTaskDependency1.setSourceId("1");
-        questTaskDependency1.setDestinationId("2");
-        questGraph.addDependency(questTaskDependency1);
+        questGraph.addDependency("1", "2");
         // Act
         boolean isReachable = questGraph.isReachable("1", "200");
         // Assert

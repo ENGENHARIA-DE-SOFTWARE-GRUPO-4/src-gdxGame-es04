@@ -10,23 +10,30 @@ import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 
 public class QuestGraph {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
 
     private Hashtable<String, QuestTask> questTasks;
-    private Hashtable<String, ArrayList<QuestTaskDependency>> questTaskDependencies;
+
+    private Hashtable<String, ArrayList<String>> questTaskDependencies;
+
     private String questTitle;
+
     private String questID;
+
     private boolean isQuestComplete;
+
     private int goldReward;
+
     private int xpReward;
+
+    public QuestGraph() {
+        this.questTasks = new Hashtable<>();
+        this.questTaskDependencies = new Hashtable<>();
+    }
 
     public int getGoldReward() {
         return goldReward;
@@ -79,9 +86,6 @@ public class QuestGraph {
     }
 
     public void setTasks(Hashtable<String, QuestTask> questTasks) {
-        if (questTasks.size() < 0) {
-            throw new IllegalArgumentException("Can't have a negative amount of conversations");
-        }
 
         this.questTasks = questTasks;
         this.questTaskDependencies = new Hashtable<>(questTasks.size());
@@ -96,68 +100,40 @@ public class QuestGraph {
         return Collections.list(enumeration);
     }
 
-    public void clear() {
-        questTasks.clear();
-        questTaskDependencies.clear();
-    }
-
     public boolean isValid(String taskID) {
         QuestTask questTask = questTasks.get(taskID);
         return questTask != null;
     }
 
     public boolean isReachable(String sourceID, String sinkID) {
-        if (!isValid(sourceID) || !isValid(sinkID)) {
-            return false;
-        }
-        if (questTasks.get(sourceID) == null) {
-            return false;
+        Set<String> reachableNodes = new HashSet<>();
+        return isReachable(sourceID, sinkID, reachableNodes);
+    }
+
+    private boolean isReachable(String sourceId, String targetId, Set<String> reachableNodes) {
+        if (sourceId.equals(targetId))
+            return true;
+
+        reachableNodes.add(sourceId);
+        List<String> dependencies = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
+        for (String depId : dependencies) {
+            if (!reachableNodes.contains(depId) && isReachable(depId, targetId, reachableNodes))
+                return true;
         }
 
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(sourceID);
-        if (list == null) {
-            return false;
-        }
-        for(QuestTaskDependency dependency: list) {
-            if (dependency.getSourceId().equalsIgnoreCase(sourceID) && dependency.getDestinationId().equalsIgnoreCase(sinkID)) {
-                return true;
-            }
-        }
         return false;
     }
 
     public QuestTask getQuestTaskByID(String id) {
         if (!isValid(id)) {
-            //System.out.println("Id " + id + " is not valid!");
             return null;
         }
         return questTasks.get(id);
     }
 
-    public void addDependency(QuestTaskDependency questTaskDependency) {
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(questTaskDependency.getSourceId());
-        if (list == null) {
-            return;
-        }
-
-        //Will not add if creates cycles
-        if (doesCycleExist(questTaskDependency)) {
-            //System.out.println("Cycle exists! Not adding");
-            return;
-        }
-
-        list.add(questTaskDependency);
-    }
-
-    public boolean doesCycleExist(QuestTaskDependency questTaskDep) {
-        Set<String> keys = questTasks.keySet();
-        for(String id: keys) {
-            if (doesQuestTaskHaveDependencies(id) && questTaskDep.getDestinationId().equalsIgnoreCase(id)) {
-                    //System.out.println("ID: " + id + " destID: " + questTaskDep.getDestinationId());
-                    return true;
-                }
-            }
-        return false;
+    public void addDependency(String sourceId, String destinationId) {
+        ArrayList<String> list = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
+        list.add(destinationId);
     }
 
     public boolean doesQuestTaskHaveDependencies(String id) {
@@ -165,7 +141,7 @@ public class QuestGraph {
         if (task == null) {
             return false;
         }
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
+        ArrayList<String> list = questTaskDependencies.get(id);
 
         return !list.isEmpty();
     }
@@ -199,14 +175,14 @@ public class QuestGraph {
         if (task == null) {
             return false;
         }
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
+        ArrayList<String> list = questTaskDependencies.get(id);
 
-        for(QuestTaskDependency dep: list) {
-            QuestTask depTask = getQuestTaskByID(dep.getDestinationId());
+        for(String depId: list) {
+            QuestTask depTask = getQuestTaskByID(depId);
             if (depTask == null || depTask.isTaskComplete()) {
                 continue;
             }
-            if (dep.getSourceId().equalsIgnoreCase(id)) {
+            if (depId.equalsIgnoreCase(id)) {
                 return false;
             }
         }
