@@ -82,6 +82,7 @@ public class ProfileManagerTest {
     void testGetProfileListNotEmpty() {
         profileManager.saveProfile();
 
+        assertFalse(profileManager.getProfileList().isEmpty());
 
         Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
     }
@@ -106,7 +107,7 @@ public class ProfileManagerTest {
     @Test
     void testGetProfileFileNotExist(){
 
-        assertEquals(profileManager.getProfileFile("notExist"),null);
+        assertEquals(null,profileManager.getProfileFile("notExist"));
 
     }
 
