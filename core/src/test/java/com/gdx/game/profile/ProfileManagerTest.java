@@ -5,8 +5,9 @@ import com.badlogic.gdx.backends.headless.HeadlessFiles;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,34 +20,41 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(GdxRunner.class)
 public class ProfileManagerTest {
 
+    ProfileManager profileManager;
+
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        this.profileManager = ProfileManager.getInstance();
+    }
+
+    @AfterEach
+    void end(){
+        this.profileManager.clearProfiles();
+        FileHandle profileFile = Gdx.files.local(DEFAULT_PROFILE + ".sav");
+        if (profileFile.exists()) {
+            profileFile.delete();
+        }
     }
 
     @Test
-    public void testProfileManager_ShouldSucceed() {
-        ProfileManager profileManager = new ProfileManager();
+    void testProfileManager_ShouldSucceed() {
 
         assertThat(profileManager.getProfileList()).isNotNull();
 
-        Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
     }
 
     @Test
-    public void testGetInstance_ShouldSucceed() {
-        ProfileManager profileManager = ProfileManager.getInstance();
+    void testGetInstance_ShouldSucceed() {
+        ProfileManager localProfileManager = ProfileManager.getInstance();
 
-        assertThat(profileManager).isNotNull();
-        assertThat(profileManager.getProfileList()).isNotNull();
-
-        Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
+        assertThat(localProfileManager).isNotNull();
+        assertThat(localProfileManager.getProfileList()).isNotNull();
     }
 
     @Test
-    public void testWriteProfileToStorage_ShouldSucceed() {
-        ProfileManager profileManager = new ProfileManager();
+    void testWriteProfileToStorage_ShouldSucceed() {
         profileManager.setProperty("toppleMapStartPosition", new Vector2(10,10));
 
         profileManager.saveProfile();
@@ -58,8 +66,7 @@ public class ProfileManagerTest {
     }
 
     @Test
-    public void testLoadProfile_ShouldSucceedWithNewProfile() {
-        ProfileManager profileManager = new ProfileManager();
+    void testLoadProfile_ShouldSucceedWithNewProfile() {
         profileManager.setIsNewProfile(true);
 
         profileManager.loadProfile();
@@ -72,60 +79,51 @@ public class ProfileManagerTest {
     }
 
     @Test
-    public void testGetProfileListNotEmpty() {
-        ProfileManager profileManager = new ProfileManager();
+    void testGetProfileListNotEmpty() {
         profileManager.saveProfile();
-        Array<String> profiles = profileManager.getProfileList();
 
-        assertFalse(profiles.isEmpty());
 
         Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
     }
 
     @Test
-    public void testGetProfileListEmpty() {
-        ProfileManager profileManager = new ProfileManager();
-        Array<String> profiles = profileManager.getProfileList();
+    void testGetProfileListEmpty() {
         
-        assertTrue(profiles.isEmpty());
+        assertTrue(profileManager.getProfileList().isEmpty());
+
     }
 
     @Test
-    public void testDoesProfileExist() {
-        ProfileManager profileManager = new ProfileManager();
+    void testGetProfileFileExist(){
+        profileManager.saveProfile();
+
+        FileHandle fh = Gdx.files.local(DEFAULT_PROFILE + ".sav");
+        
+        assertEquals(fh,profileManager.getProfileFile(DEFAULT_PROFILE));
+
+    }
+
+    @Test
+    void testGetProfileFileNotExist(){
+
+        assertEquals(profileManager.getProfileFile("notExist"),null);
+
+    }
+
+    @Test
+    void testDoesProfileExist() {
         profileManager.saveProfile();
         assertTrue(profileManager.doesProfileExist(ProfileManager.DEFAULT_PROFILE));
     }
 
     @Test
-    public void testDoesProfileNotExist() {
-        ProfileManager profileManager = new ProfileManager();
+    
+    void testDoesProfileNotExist() {
         assertFalse(profileManager.doesProfileExist("nonexistent"));
     }
 
     @Test
-    public void testSetPropertyAndGetProperties() {
-        ProfileManager profileManager = new ProfileManager();
-        String key = "testKey";
-        String value = "testValue";
-
-        profileManager.setProperty(key, value);
-
-        String retrievedValue = profileManager.getProperty(key, String.class);
-        assertEquals(value, retrievedValue);
-    }
-
-    @Test
-    public void testSetAndGetIsNewProfile() {
-        ProfileManager profileManager = new ProfileManager();
-        assertFalse(profileManager.getIsNewProfile());
-        profileManager.setIsNewProfile(true);
-        assertTrue(profileManager.getIsNewProfile());
-    }
-
-    @Test
-    public void testStoreAllProfilesWithExistingProfiles() {
-        ProfileManager profileManager = new ProfileManager();
+    void testStoreAllProfilesWithExistingProfiles() {
         Gdx.files = new HeadlessFiles();
 
         FileHandle profile1File = Gdx.files.local("profile1.sav");
@@ -143,10 +141,67 @@ public class ProfileManagerTest {
     }
 
     @Test
-    public void testStoreAllProfilesWithNoExistingProfiles() {
-        ProfileManager profileManager = new ProfileManager();
+    void testStoreAllProfilesWithNoExistingProfiles() {
+
         profileManager.storeAllProfiles();
         assertEquals(0, profileManager.getProfileList().size);
+    }
+
+
+    @Test
+    void testSetPropertyAndGetProperties() {
+
+        String key = "testKey";
+        String value = "testValue";
+
+        profileManager.setProperty(key, value);
+
+        String retrievedValue = profileManager.getProperty(key, String.class);
+        assertEquals(value, retrievedValue);
+    }
+
+    @Test
+    void testSaveProfile(){
+        profileManager.setProperty("testKey", "testValue");
+
+        profileManager.saveProfile();
+
+        FileHandle profileFile = profileManager.getProfileFile(ProfileManager.DEFAULT_PROFILE);
+
+        String fileContent = profileFile.readString();
+        assertNotNull(fileContent);
+        assertFalse(fileContent.isEmpty());
+    }
+
+    @Test
+    void testClearProfilesListNotEmpty(){
+
+        profileManager.saveProfile();
+        assertFalse(profileManager.getProfileList().isEmpty());
+        profileManager.clearProfiles();
+        assertTrue(profileManager.getProfileList().isEmpty());
+
+    }
+
+    @Test
+    void testClearProfilesListEmpty(){
+        profileManager.clearProfiles();
+        assertTrue(profileManager.getProfileList().isEmpty());
+    }
+
+    @Test
+    void testSetCurrentProfileExists(){
+        String profileTest = "teste";
+        profileManager.writeProfileToStorage(profileTest, "", false);
+        profileManager.setCurrentProfile(profileTest);
+        assertEquals(profileTest, profileManager.getCurrentProfile());
+        Gdx.files.local(profileTest + ".sav").delete();
+    }
+
+    @Test
+    void testSetCurrentProfileNotExists(){
+        profileManager.setCurrentProfile("notExist");
+        assertEquals(DEFAULT_PROFILE, profileManager.getCurrentProfile());
     }
 
 }

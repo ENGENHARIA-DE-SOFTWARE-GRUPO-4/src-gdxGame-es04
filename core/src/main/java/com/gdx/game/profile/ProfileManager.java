@@ -7,14 +7,14 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Set;
 
 public class ProfileManager extends ProfileSubject {
 
     private Json json;
     private static ProfileManager profileManager;
-    private Hashtable<String,FileHandle> profiles;
+    private HashMap<String, FileHandle> profiles;
     private ObjectMap<String, Object> profileProperties = new ObjectMap<>();
     private String profileName;
     private boolean isNewProfile = false;
@@ -25,7 +25,7 @@ public class ProfileManager extends ProfileSubject {
 
     public ProfileManager() {
         json = new Json();
-        profiles = new Hashtable<>();
+        profiles = new HashMap<>();
         profiles.clear();
         profileName = DEFAULT_PROFILE;
         storeAllProfiles();
@@ -47,30 +47,25 @@ public class ProfileManager extends ProfileSubject {
     }
 
     public Array<String> getProfileList() {
-        Array<String> profiles = new Array<>();
-        for(Enumeration<String> e = this.profiles.keys(); e.hasMoreElements();) {
-            profiles.add(e.nextElement());
+        Array<String> profileList = new Array<>();
+        Set<String> keys = this.profiles.keySet();
+        for (String key : keys) {
+            profileList.add(key);
         }
-        return profiles;
+        return profileList;
     }
 
     public FileHandle getProfileFile(String profile) {
-        if (!doesProfileExist(profile)) {
-            return null;
-        }
-        return profiles.get(profile);
+        return doesProfileExist(profile) ? profiles.get(profile) : null;
     }
 
     public void storeAllProfiles() {
         if (Gdx.files.isLocalStorageAvailable()) {
             FileHandle[] files = Gdx.files.local(".").list(SAVEGAME_SUFFIX);
 
-            for(FileHandle file: files) {
+            for (FileHandle file : files) {
                 profiles.put(file.nameWithoutExtension(), file);
             }
-        } else {
-            //TODO: try external directory here
-            return;
         }
     }
 
@@ -80,36 +75,21 @@ public class ProfileManager extends ProfileSubject {
 
     public void writeProfileToStorage(String profileName, String fileData, boolean overwrite) {
         String fullFilename = profileName + SAVEGAME_SUFFIX;
+        FileHandle file = Gdx.files.isLocalStorageAvailable() ? Gdx.files.local(fullFilename) : null;
 
-        boolean localFileExists = Gdx.files.local(fullFilename).exists();
-
-        //If we cannot overwrite and the file exists, exit
-        if (localFileExists && !overwrite) {
-            return;
-        }
-
-        FileHandle file =  null;
-
-        if (Gdx.files.isLocalStorageAvailable()) {
-            file = Gdx.files.local(fullFilename);
+        if (file != null && (!file.exists() || overwrite)) {
             String encodedString = Base64Coder.encodeString(fileData);
             file.writeString(encodedString, !overwrite);
+            profiles.put(profileName, file);
         }
-
-        profiles.put(profileName, file);
     }
 
     public void setProperty(String key, Object object) {
         profileProperties.put(key, object);
     }
 
-    public <T extends Object> T getProperty(String key, Class<T> type){
-        T property = null;
-        if (!profileProperties.containsKey(key)) {
-            return property;
-        }
-        property = (T) profileProperties.get(key);
-        return property;
+    public <T> T getProperty(String key, Class<T> type) {
+        return profileProperties.containsKey(key) ? type.cast(profileProperties.get(key)) : null;
     }
 
     public void saveProfile() {
@@ -123,30 +103,27 @@ public class ProfileManager extends ProfileSubject {
             notify(this, ProfileObserver.ProfileEvent.CLEAR_CURRENT_PROFILE);
             saveProfile();
         }
-
-        String fullProfileFileName = profileName + SAVEGAME_SUFFIX;
-        boolean doesProfileFileExist = Gdx.files.local(fullProfileFileName).exists();
-
-        if (!doesProfileFileExist) {
-            return;
-        }
-
         FileHandle encodedFile = profiles.get(profileName);
-        String s = encodedFile.readString();
 
-        String decodedFile = Base64Coder.decodeString(s);
-
-        profileProperties = json.fromJson(ObjectMap.class, decodedFile);
-        notify(this, ProfileObserver.ProfileEvent.PROFILE_LOADED);
-        isNewProfile = false;
+        if (encodedFile != null && encodedFile.exists()) {
+            String s = encodedFile.readString();
+            String decodedFile = Base64Coder.decodeString(s);
+            profileProperties = json.fromJson(ObjectMap.class, decodedFile);
+            notify(this, ProfileObserver.ProfileEvent.PROFILE_LOADED);
+            isNewProfile = false;
+        }
     }
 
     public void setCurrentProfile(String profileName) {
-        if (doesProfileExist(profileName)) {
-            this.profileName = profileName;
-        } else {
-            this.profileName = DEFAULT_PROFILE;
-        }
+        this.profileName = doesProfileExist(profileName) ? profileName : DEFAULT_PROFILE;
+    }
+
+    public String getCurrentProfile(){
+        return this.profileName;
+    }
+
+    public void clearProfiles(){
+        this.profiles.clear();
     }
 
 }
