@@ -149,4 +149,12 @@ public class ProfileManager extends ProfileSubject {
         }
     }
 
+    public String getCurrentProfile(){
+        return this.profileName;
+    }
+
+    public void clearProfiles(){
+        this.profiles.clear();
+    }
+
 }
