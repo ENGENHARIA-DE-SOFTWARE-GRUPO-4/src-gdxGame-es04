@@ -2,14 +2,11 @@ package com.gdx.game.quest;
 
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.map.MapManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class QuestGraph {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
 
     private Hashtable<String, QuestTask> questTasks;
 
@@ -148,7 +145,6 @@ public class QuestGraph {
             return false;
 
         ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
-        LOGGER.debug(list.toString());
         for (QuestTaskDependency dep : list) {
             QuestTask depTask = getQuestTaskByID(dep.getSourceId());
             if (depTask != null && !depTask.isTaskComplete() && dep.getSourceId().equalsIgnoreCase(task.getId())) {
