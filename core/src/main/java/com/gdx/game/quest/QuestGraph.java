@@ -196,7 +196,6 @@ public class QuestGraph {
     }
 
     public void init(MapManager mapMgr) {
-        System.out.println("oi");
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
