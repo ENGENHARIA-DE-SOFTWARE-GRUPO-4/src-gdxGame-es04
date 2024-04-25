@@ -28,7 +28,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleInventoryUI.class);
 
-    public final static int NUM_SLOTS = 50;
+    public static final int NUM_SLOTS = 50;
     public static final String PLAYER_INVENTORY = "Player_Inventory";
 
     private Table inventorySlotTable;
