@@ -36,6 +36,8 @@ import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
@@ -220,7 +222,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 if (isCritical) {
                     dmgPlayerValLabel.setColor(Color.ORANGE);
                 }
-                //battleShakeCam.startShaking();
+
                 dmgPlayerValLabel.setVisible(true);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 battleStatusUI.setHPValue(hpVal);
@@ -238,7 +240,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 if (isCritical) {
                     dmgOpponentValLabel.setColor(Color.ORANGE);
                 }
-                //battleShakeCam.startShaking();
+
                 dmgOpponentValLabel.setVisible(true);
                 LOGGER.debug("Player deals {} damages", damageEnemy);
             }
@@ -264,13 +266,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 LOGGER.debug("Player turn done");
                 battleState.determineTurn();
             }
-            /*case PLAYER_USED_MAGIC:
-                float x = currentImagePosition.x + (enemyWidth/2);
-                float y = currentImagePosition.y + (enemyHeight/2);
-                //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
-                break;*/
-            default -> {
-            }
+
         }
     }
 
@@ -287,8 +283,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                     notificationUI.setVisible(true);
                 }
             }
-            default -> {
-            }
+
         }
     }
 
@@ -305,10 +300,8 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 int typeValue = Integer.parseInt(strings[1]);
 
                 if (InventoryItem.doesRestoreHP(type)) {
-                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_EATING);
                     battleStatusUI.addHPValue(typeValue);
                 } else if (InventoryItem.doesRestoreMP(type)) {
-                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_DRINKING);
                     battleStatusUI.addMPValue(typeValue);
                 }
             }
@@ -318,52 +311,38 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                     drops.add(value);
                 }
             }
-            default -> {
-            }
         }
     }
 
     @Override
     public void onNotify(int value, StatusObserver.StatusEvent event) {
         switch (event) {
-            case UPDATED_HP -> {
+            case UPDATED_HP ->
                 ProfileManager.getInstance().setProperty("currentPlayerHP", battleStatusUI.getHPValue());
-            }
             case UPDATED_LEVEL -> {
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", battleStatusUI.getLevelValue());
                 createStatsUpUI(battleStatusUI.getNbrLevelUp());
             }
-            case UPDATED_MP -> {
+            case UPDATED_MP ->
                 ProfileManager.getInstance().setProperty("currentPlayerMP", battleStatusUI.getMPValue());
-            }
-            case UPDATED_XP -> {
+            case UPDATED_XP ->
                 ProfileManager.getInstance().setProperty("currentPlayerXP", battleStatusUI.getXPValue());
-            }
-            case LEVELED_UP -> {
-                //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
-            }
-            default -> {
-            }
         }
     }
 
     @Override
     public void onNotify(String value, ClassObserver.ClassEvent event) {
-        switch (event) {
-            case CHECK_UPGRADE_TREE_CLASS -> {
-                String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
-                int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
-                int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
-                String configFilePath = player.getEntityConfig().getClassTreePath();
-                Tree tree = Tree.buildClassTree(configFilePath);
-                Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
-                Tree.saveNewClass(node);
+        if (Objects.requireNonNull(event) == ClassEvent.CHECK_UPGRADE_TREE_CLASS) {
+            String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
+            int characterAP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+            int characterDP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+            String configFilePath = player.getEntityConfig().getClassTreePath();
+            Tree tree = Tree.buildClassTree(configFilePath);
+            Node node = tree.checkForClassUpgrade(currentClass, characterAP, characterDP);
+            Tree.saveNewClass(node);
 
-                if (node != null) {
-                    notificationUI.loadUpgradeClass(node.getClassId());
-                }
-            }
-            default -> {
+            if (node != null) {
+                notificationUI.loadUpgradeClass(node.getClassId());
             }
         }
     }
@@ -416,7 +395,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void show() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: show");
     }
 
     @Override
@@ -448,17 +427,17 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void pause() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: pause");
     }
 
     @Override
     public void resume() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: resume");
     }
 
     @Override
     public void hide() {
-
+        throw new UnsupportedOperationException("Unsupported Operation: hide");
     }
 
     @Override
