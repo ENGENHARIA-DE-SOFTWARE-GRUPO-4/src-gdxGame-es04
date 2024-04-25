@@ -1,6 +1,7 @@
 package com.gdx.game.quest;
 
 import com.badlogic.gdx.utils.Json;
+import com.gdx.game.map.MapFactory;
 import com.gdx.game.map.MapManager;
 
 import java.util.*;
@@ -167,13 +168,7 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
-                continue;
-
-            String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
-            if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
-                continue;
-            }
+            if (isInvalidQuestTask(questTask, mapMgr)) continue;
 
             // Determine the handler based on quest type
             QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
@@ -195,18 +190,24 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
-                continue;
+            if (isInvalidQuestTask(questTask, mapMgr)) continue;
 
-            String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
-            if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
-                continue;
-            }
-
+            // Determine the handler based on quest type
             QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
             if (handler != null)
                 handler.handleInit(mapMgr, questTask, questID);
         }
+    }
+
+    private boolean isInvalidQuestTask(QuestTask questTask, MapManager mapManager) {
+        if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
+            return true;
+
+        QuestTask.QuestTaskPropertyType questTaskPropertyType = QuestTask.QuestTaskPropertyType.TARGET_LOCATION;
+        String taskLocation = questTask.getPropertyValue(questTaskPropertyType.toString());
+        MapFactory.MapType mapType = mapManager.getCurrentMapType();
+
+        return taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapType.toString());
     }
 
     public String toString() {
