@@ -178,17 +178,16 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
-            if (inventorySlot == null) {
-                continue;
-            }
-            int numItems = inventorySlot.getNumItems();
-            if (numItems > 0) {
-                String topItemName = inventorySlot.getTopInventoryItem().getName();
-                if (topItemName.equalsIgnoreCase(filterOutName)) {
-                    continue;
+            if (inventorySlot != null) {
+                int numItems = inventorySlot.getNumItems();
+                if (numItems > 0) {
+                    String topItemName = inventorySlot.getTopInventoryItem().getName();
+                    if (topItemName.equalsIgnoreCase(filterOutName)) {
+                        continue;
+                    }
+                    items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
+                            numItems, inventorySlot.getTopInventoryItem().getName()));
                 }
-                items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
-                        numItems, inventorySlot.getTopInventoryItem().getName()));
             }
         }
         return items;
