@@ -270,17 +270,16 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
         for(; index < sourceCells.size; index++) {
             InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
-            if (inventorySlot == null) {
-                continue;
-            }
-            int numItems = inventorySlot.getNumItems();
-            if (numItems == 0) {
-                InventoryItem inventoryItem = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(itemTypeID));
-                inventoryItem.setName(itemName);
-                inventorySlot.add(inventoryItem);
-                dragAndDrop.addSource(new InventorySlotSource(inventorySlot, dragAndDrop));
-                LOGGER.info("Item {} was looted", itemName);
-                break;
+            if (inventorySlot != null) {
+                int numItems = inventorySlot.getNumItems();
+                if (numItems == 0) {
+                    InventoryItem inventoryItem = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(itemTypeID));
+                    inventoryItem.setName(itemName);
+                    inventorySlot.add(inventoryItem);
+                    dragAndDrop.addSource(new InventorySlotSource(inventorySlot, dragAndDrop));
+                    LOGGER.info("Item {} was looted", itemName);
+                    break;
+                }
             }
         }
     }
