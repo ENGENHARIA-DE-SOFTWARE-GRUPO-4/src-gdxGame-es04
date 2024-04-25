@@ -149,9 +149,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
                 }
 
                 inventorySlot.add(item);
-                if (item.getName().equalsIgnoreCase(defaultName)) {
-                    draganddrop.addSource(new InventorySlotSource(inventorySlot, draganddrop));
-                } else if (!disableNonDefaultItems) {
+                if (item.getName().equalsIgnoreCase(defaultName) || !disableNonDefaultItems) {
                     draganddrop.addSource(new InventorySlotSource(inventorySlot, draganddrop));
                 }
             }
