@@ -175,8 +175,6 @@ public class QuestGraph {
             QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
             if (handler != null)
                 handler.handleUpdate(questTask, questID);
-            else
-                break;
         }
     }
 
@@ -190,6 +188,7 @@ public class QuestGraph {
     }
 
     public void init(MapManager mapMgr) {
+        System.out.println("oi");
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
@@ -204,8 +203,6 @@ public class QuestGraph {
             QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
             if (handler != null)
                 handler.handleInit(mapMgr, questTask, questID);
-            else
-                break;
         }
     }
 
