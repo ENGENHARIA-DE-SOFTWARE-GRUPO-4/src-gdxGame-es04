@@ -42,7 +42,7 @@ allprojects {
         properties {
             property("sonar.projectKey", "gdxGame-es04")
             property("sonar.organization", "es04-ufcg")
-            property("sonar.host.url", "http://localhost:9000")
+            property("sonar.host.url", "https://liad.computacao.ufcg.edu.br:8080")
         }
     }
 
