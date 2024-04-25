@@ -266,7 +266,10 @@ public class QuestGraphTest {
     @Test
     public void testReachableTaskTC01() {
         // Arrange
-        questGraph.addDependency("1", "2");
+        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
+        questTaskDependency.setSourceId("1");
+        questTaskDependency.setDestinationId("2");
+        questGraph.addDependency(questTaskDependency);
         // Act
         boolean isReachable = questGraph.isReachable("1", "2");
         // Assert
@@ -276,8 +279,14 @@ public class QuestGraphTest {
     @Test
     public void testReachableTaskTC02() {
         // Arrange
-        questGraph.addDependency("1", "2");
-        questGraph.addDependency("2", "3");
+        QuestTaskDependency questTaskDependency1 = new QuestTaskDependency();
+        QuestTaskDependency questTaskDependency2 = new QuestTaskDependency();
+        questTaskDependency1.setSourceId("1");
+        questTaskDependency1.setDestinationId("2");
+        questTaskDependency2.setSourceId("2");
+        questTaskDependency2.setDestinationId("3");
+        questGraph.addDependency(questTaskDependency1);
+        questGraph.addDependency(questTaskDependency2);
         // Act
         boolean isReachable = questGraph.isReachable("1", "3");
         // Assert
@@ -287,7 +296,10 @@ public class QuestGraphTest {
     @Test
     public void testNotReachableTask() {
         // Arrange
-        questGraph.addDependency("1", "2");
+        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
+        questTaskDependency.setSourceId("1");
+        questTaskDependency.setDestinationId("2");
+        questGraph.addDependency(questTaskDependency);
         // Act
         boolean isReachable = questGraph.isReachable("1", "200");
         // Assert

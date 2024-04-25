@@ -2,14 +2,18 @@ package com.gdx.game.quest;
 
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.map.MapManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class QuestGraph {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
+
     private Hashtable<String, QuestTask> questTasks;
 
-    private Hashtable<String, ArrayList<String>> questTaskDependencies;
+    private Hashtable<String, ArrayList<QuestTaskDependency> > questTaskDependencies;
 
     private String questTitle;
 
@@ -92,9 +96,10 @@ public class QuestGraph {
             return true;
 
         reachableNodes.add(sourceId);
-        List<String> dependencies = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
-        for (String depId : dependencies) {
-            if (!reachableNodes.contains(depId) && isReachable(depId, targetId, reachableNodes))
+        List<QuestTaskDependency> dependencies = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
+        for (QuestTaskDependency dep : dependencies) {
+            String destinationId = dep.getDestinationId();
+            if (!reachableNodes.contains(destinationId) && isReachable(destinationId, targetId, reachableNodes))
                 return true;
         }
 
@@ -105,9 +110,10 @@ public class QuestGraph {
         return (isValid(id)) ? questTasks.get(id) : null;
     }
 
-    public void addDependency(String sourceId, String destinationId) {
-        ArrayList<String> list = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
-        list.add(destinationId);
+    public void addDependency(QuestTaskDependency questTaskDependency) {
+        String sourceId = questTaskDependency.getSourceId();
+        ArrayList<QuestTaskDependency> list = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
+        list.add(questTaskDependency);
     }
 
     public boolean doesQuestTaskHaveDependencies(String id) {
@@ -115,7 +121,7 @@ public class QuestGraph {
         if (task == null) {
             return false;
         }
-        ArrayList<String> list = questTaskDependencies.get(id);
+        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
         return !list.isEmpty();
     }
 
@@ -141,11 +147,13 @@ public class QuestGraph {
         if (task == null)
             return false;
 
-        ArrayList<String> list = questTaskDependencies.get(id);
-        for(String depId: list) {
-            QuestTask depTask = getQuestTaskByID(depId);
-            if (depTask != null && !depTask.isTaskComplete() && depId.equalsIgnoreCase(id))
+        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
+        LOGGER.debug(list.toString());
+        for (QuestTaskDependency dep : list) {
+            QuestTask depTask = getQuestTaskByID(dep.getSourceId());
+            if (depTask != null && !depTask.isTaskComplete() && dep.getSourceId().equalsIgnoreCase(task.getId())) {
                 return false;
+            }
         }
 
         return true;
