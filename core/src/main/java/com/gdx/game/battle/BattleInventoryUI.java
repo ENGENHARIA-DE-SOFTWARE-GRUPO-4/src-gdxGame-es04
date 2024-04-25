@@ -217,14 +217,13 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         for(InventoryItemLocation item : items) {
             for(; index < sourceCells.size; index++) {
                 InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
-                if (inventorySlot == null) {
-                    continue;
-                }
-                int numItems = inventorySlot.getNumItems();
-                if (numItems == 0) {
-                    item.setLocationIndex(index);
-                    index++;
-                    break;
+                if (inventorySlot != null) {
+                    int numItems = inventorySlot.getNumItems();
+                    if (numItems == 0) {
+                        item.setLocationIndex(index);
+                        index++;
+                        break;
+                    }
                 }
             }
             if (index == sourceCells.size) {
