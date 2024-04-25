@@ -22,6 +22,8 @@ public class ProfileManagerTest {
 
     ProfileManager profileManager;
 
+    boolean originalLocalStorageAvailability;
+
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
@@ -62,7 +64,6 @@ public class ProfileManagerTest {
         assertThat(profileManager.getProfileList()).hasSize(1);
         assertThat(profileManager.getProfileList()).contains(DEFAULT_PROFILE);
 
-        Gdx.files.local(DEFAULT_PROFILE + ".sav").delete();
     }
 
     @Test
@@ -107,7 +108,7 @@ public class ProfileManagerTest {
     @Test
     void testGetProfileFileNotExist(){
 
-        assertEquals(null,profileManager.getProfileFile("notExist"));
+        assertNull(profileManager.getProfileFile("notExist"));
 
     }
 
@@ -160,6 +161,16 @@ public class ProfileManagerTest {
         String retrievedValue = profileManager.getProperty(key, String.class);
         assertEquals(value, retrievedValue);
     }
+
+    @Test
+    void testGetPropertyProfileNotExist(){
+
+        String key = "fakeKey";
+
+        assertNull(profileManager.getProperty(key,String.class));
+
+    }
+
 
     @Test
     void testSaveProfile(){
