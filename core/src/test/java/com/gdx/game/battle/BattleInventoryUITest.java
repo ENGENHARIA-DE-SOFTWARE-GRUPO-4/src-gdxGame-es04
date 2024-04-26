@@ -2,15 +2,10 @@ package com.gdx.game.battle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.inventory.InventoryItem;
-import com.gdx.game.inventory.InventoryItemFactory;
-import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.slot.InventorySlot;
 import com.gdx.game.manager.ResourceManager;
 import org.junit.jupiter.api.BeforeEach;
