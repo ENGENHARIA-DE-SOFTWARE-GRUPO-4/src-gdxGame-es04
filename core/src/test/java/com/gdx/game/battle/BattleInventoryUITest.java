@@ -2,10 +2,15 @@ package com.gdx.game.battle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.InventoryItemFactory;
+import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.slot.InventorySlot;
 import com.gdx.game.manager.ResourceManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(GdxRunner.class)
 public class BattleInventoryUITest {
@@ -63,6 +68,19 @@ public class BattleInventoryUITest {
     }
 
     @Test
+    public void testAddEntityToInventory_ShouldAddItemToFirstEmptySlot() {
+        BattleInventoryUI battleInventoryUI = new BattleInventoryUI();
+
+        assertThat(battleInventoryUI.doesInventoryHaveSpace()).isTrue();
+
+        battleInventoryUI.addEntityToInventory("WEAPON01", "Sword");
+
+        InventorySlot firstSlot = (InventorySlot) battleInventoryUI.getInventorySlotTable().getCells().get(0).getActor();
+        assertThat(firstSlot.getNumItems()).isEqualTo(1);
+        assertThat(firstSlot.getTopInventoryItem().getName()).isEqualTo("Sword");
+    }
+
+    @Test
     public void testSetInventoryItemNames_ShouldUpdateAllItemNamesInInventory() {
         BattleInventoryUI battleInventoryUI = new BattleInventoryUI();
         Table targetTable = battleInventoryUI.getInventorySlotTable();
@@ -85,25 +103,25 @@ public class BattleInventoryUITest {
         }
     }
 
-        @Test
-        public void testClearInventoryItems_ShouldRemoveAllItemsFromInventory() {
-            BattleInventoryUI battleInventoryUI = new BattleInventoryUI();
-            Table targetTable = battleInventoryUI.getInventorySlotTable();
+    @Test
+    public void testClearInventoryItems_ShouldRemoveAllItemsFromInventory() {
+        BattleInventoryUI battleInventoryUI = new BattleInventoryUI();
+        Table targetTable = battleInventoryUI.getInventorySlotTable();
 
-            for (Cell cell : targetTable.getCells()) {
-                InventorySlot inventorySlot = (InventorySlot) cell.getActor();
-                if (inventorySlot != null) {
-                    inventorySlot.add(new InventoryItem());
-                }
-            }
-
-            BattleInventoryUI.clearInventoryItems(targetTable);
-
-            for (Cell cell : targetTable.getCells()) {
-                InventorySlot inventorySlot = (InventorySlot) cell.getActor();
-                if (inventorySlot != null) {
-                    assertThat(inventorySlot.getNumItems()).isZero();
-                }
+        for (Cell cell : targetTable.getCells()) {
+            InventorySlot inventorySlot = (InventorySlot) cell.getActor();
+            if (inventorySlot != null) {
+                inventorySlot.add(new InventoryItem());
             }
         }
+
+        BattleInventoryUI.clearInventoryItems(targetTable);
+
+        for (Cell cell : targetTable.getCells()) {
+            InventorySlot inventorySlot = (InventorySlot) cell.getActor();
+            if (inventorySlot != null) {
+                assertThat(inventorySlot.getNumItems()).isZero();
+            }
+        }
+    }
 }
