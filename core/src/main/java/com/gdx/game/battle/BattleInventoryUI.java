@@ -29,15 +29,15 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleInventoryUI.class);
 
-    public final static int NUM_SLOTS = 50;
+    public static final int NUM_SLOTS = 50;
     public static final String PLAYER_INVENTORY = "Player_Inventory";
 
     private Table inventorySlotTable;
     private DragAndDrop dragAndDrop;
     private Array<Actor> inventoryActors;
 
-    private final int slotWidth = 52;
-    private final int slotHeight = 52;
+    private static final int slotWidth = 52;
+    private static final int slotHeight = 52;
 
     private Array<InventoryObserver> observers;
 
@@ -150,9 +150,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
                 }
 
                 inventorySlot.add(item);
-                if (item.getName().equalsIgnoreCase(defaultName)) {
-                    draganddrop.addSource(new InventorySlotSource(inventorySlot, draganddrop));
-                } else if (!disableNonDefaultItems) {
+                if (item.getName().equalsIgnoreCase(defaultName) || !disableNonDefaultItems) {
                     draganddrop.addSource(new InventorySlotSource(inventorySlot, draganddrop));
                 }
             }
