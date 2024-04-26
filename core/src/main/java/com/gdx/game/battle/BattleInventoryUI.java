@@ -73,7 +73,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         return inventorySlotTable;
     }
 
-    private void handleLayoutInventorySlot() {
+    private void handleLayoutInventorySlot() /*Testado*/ {
         for(int i = 1; i <= NUM_SLOTS; i++) {
             InventorySlot inventorySlot = new InventorySlot();
             inventorySlot.addListener(new InventorySlotTooltipListener(inventorySlotTooltip));
@@ -107,7 +107,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         }
     }
 
-    public static void clearInventoryItems(Table targetTable) {
+    public static void clearInventoryItems(Table targetTable) /*Testado*/ {
         Array<Cell> cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot = (InventorySlot)cells.get(i).getActor();
@@ -243,7 +243,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
 
-    public static void setInventoryItemNames(Table targetTable, String name) {
+    public static void setInventoryItemNames(Table targetTable, String name) /*Testado*/ {
         Array<Cell> cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
@@ -254,7 +254,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         }
     }
 
-    public boolean doesInventoryHaveSpace() {
+    public boolean doesInventoryHaveSpace() /*Testado*/{
         Array<Cell> sourceCells = inventorySlotTable.getCells();
         int index = 0;
 
@@ -273,7 +273,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         return false;
     }
 
-    public void addEntityToInventory(String itemTypeID, String itemName) {
+    public void addEntityToInventory(String itemTypeID, String itemName) /*Testado*/ {
         Array<Cell> sourceCells = inventorySlotTable.getCells();
         int index = 0;
 
