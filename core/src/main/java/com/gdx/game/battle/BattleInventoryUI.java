@@ -73,34 +73,42 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
     private void handleLayoutInventorySlot() {
         for(int i = 1; i <= NUM_SLOTS; i++) {
-            InventorySlot inventorySlot = new InventorySlot();
-            inventorySlot.addListener(new InventorySlotTooltipListener(inventorySlotTooltip));
-            dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
-
+            InventorySlot inventorySlot = createInventorySlot();
             inventorySlotTable.add(inventorySlot).size(slotWidth, slotHeight);
-
-            inventorySlot.addListener(new ClickListener() {
-                @Override
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchUp(event, x, y, pointer, button);
-                    if (getTapCount() == 2) {
-                        InventorySlot slot = (InventorySlot)event.getListenerActor();
-                        if (slot.hasItem()) {
-                            InventoryItem item = slot.getTopInventoryItem();
-                            if (item.isConsumable()) {
-                                String itemInfo = item.getItemUseType() + MESSAGE_TOKEN + item.getItemUseTypeValue();
-                                BattleInventoryUI.this.notify(itemInfo, InventoryObserver.InventoryEvent.ITEM_CONSUMED);
-                                slot.removeActor(item);
-                                slot.remove(item);
-                            }
-                        }
-                    }
-                }
-            });
+            setupInventorySlot(inventorySlot);
 
             int lengthSlotRow = 10;
             if (i % lengthSlotRow == 0) {
                 inventorySlotTable.row();
+            }
+        }
+    }
+
+    private InventorySlot createInventorySlot() {
+        InventorySlot inventorySlot = new InventorySlot();
+        inventorySlot.addListener(new InventorySlotTooltipListener(inventorySlotTooltip));
+        dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
+        return inventorySlot;
+    }
+
+    private void setupInventorySlot(InventorySlot inventorySlot) {
+        inventorySlot.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                handleInventorySlotClick((InventorySlot) event.getListenerActor());
+            }
+        });
+    }
+
+    private void handleInventorySlotClick(InventorySlot slot) {
+        if (slot.hasItem()) {
+            InventoryItem item = slot.getTopInventoryItem();
+            if (item.isConsumable()) {
+                String itemInfo = item.getItemUseType() + MESSAGE_TOKEN + item.getItemUseTypeValue();
+                BattleInventoryUI.this.notify(itemInfo, InventoryObserver.InventoryEvent.ITEM_CONSUMED);
+                slot.removeActor(item);
+                slot.remove(item);
             }
         }
     }
@@ -121,10 +129,9 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
-            if (inventorySlot == null) {
-                continue;
+            if (inventorySlot != null) {
+                inventorySlot.removeAllInventoryItemsWithName(name);
             }
-            inventorySlot.removeAllInventoryItemsWithName(name);
         }
         return items;
     }
@@ -160,13 +167,12 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
-            if (inventorySlot == null) {
-                continue;
-            }
-            int numItems = inventorySlot.getNumItems();
-            if (numItems > 0) {
-                items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
-                        numItems, inventorySlot.getTopInventoryItem().getName()));
+            if (inventorySlot != null) {
+                int numItems = inventorySlot.getNumItems();
+                if (numItems > 0) {
+                    items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
+                            numItems, inventorySlot.getTopInventoryItem().getName()));
+                }
             }
         }
         return items;
@@ -187,23 +193,6 @@ public class BattleInventoryUI extends Window implements InventorySubject {
                     items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
                             numItems, inventorySlot.getTopInventoryItem().getName()));
                 }
-            }
-        }
-        return items;
-    }
-
-    public static Array<InventoryItemLocation> getInventory(Table targetTable, String name) {
-        var cells = targetTable.getCells();
-        Array<InventoryItemLocation> items = new Array<>();
-        for(int i = 0; i < cells.size; i++) {
-            InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
-            if (inventorySlot == null) {
-                continue;
-            }
-            int numItems = inventorySlot.getNumItems(name);
-            if (numItems > 0) {
-                items.add(new InventoryItemLocation(i, inventorySlot.getTopInventoryItem().getItemTypeID().toString(),
-                        numItems, name));
             }
         }
         return items;
