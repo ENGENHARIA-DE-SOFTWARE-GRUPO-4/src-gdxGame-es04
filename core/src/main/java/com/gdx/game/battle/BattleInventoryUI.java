@@ -2,7 +2,6 @@ package com.gdx.game.battle;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -107,7 +106,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static void clearInventoryItems(Table targetTable) {
-        Array<Cell> cells = targetTable.getCells();
+        var cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot = (InventorySlot)cells.get(i).getActor();
             if (inventorySlot == null) {
@@ -118,7 +117,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> removeInventoryItems(String name, Table inventoryTable) {
-        Array<Cell> cells = inventoryTable.getCells();
+        var cells = inventoryTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
@@ -133,7 +132,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     public static void populateInventory(Table targetTable, Array<InventoryItemLocation> inventoryItems, DragAndDrop draganddrop, String defaultName, boolean disableNonDefaultItems) {
         clearInventoryItems(targetTable);
 
-        Array<Cell> cells = targetTable.getCells();
+        var cells = targetTable.getCells();
         for(int i = 0; i < inventoryItems.size; i++) {
             InventoryItemLocation itemLocation = inventoryItems.get(i);
             InventoryItem.ItemTypeID itemTypeID = InventoryItem.ItemTypeID.valueOf(itemLocation.getItemTypeAtLocation());
@@ -157,7 +156,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> getInventory(Table targetTable) {
-        Array<Cell> cells = targetTable.getCells();
+        var cells = targetTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
@@ -174,7 +173,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> getInventoryFiltered(Table targetTable, String filterOutName) {
-        Array<Cell> cells = targetTable.getCells();
+        var cells = targetTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
@@ -194,7 +193,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public static Array<InventoryItemLocation> getInventory(Table targetTable, String name) {
-        Array<Cell> cells = targetTable.getCells();
+        var cells = targetTable.getCells();
         Array<InventoryItemLocation> items = new Array<>();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
@@ -212,7 +211,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
     public static Array<InventoryItemLocation> getInventoryFiltered(Table sourceTable, Table targetTable, String filterOutName) {
         Array<InventoryItemLocation> items = getInventoryFiltered(targetTable, filterOutName);
-        Array<Cell> sourceCells = sourceTable.getCells();
+        var sourceCells = sourceTable.getCells();
         int index = 0;
         for(InventoryItemLocation item : items) {
             for(; index < sourceCells.size; index++) {
@@ -235,7 +234,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
 
 
     public static void setInventoryItemNames(Table targetTable, String name) {
-        Array<Cell> cells = targetTable.getCells();
+        var cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {
             InventorySlot inventorySlot =  ((InventorySlot)cells.get(i).getActor());
             if (inventorySlot == null) {
@@ -246,7 +245,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public boolean doesInventoryHaveSpace() {
-        Array<Cell> sourceCells = inventorySlotTable.getCells();
+        var sourceCells = inventorySlotTable.getCells();
         int index = 0;
 
         for(; index < sourceCells.size; index++) {
@@ -265,7 +264,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public void addEntityToInventory(String itemTypeID, String itemName) {
-        Array<Cell> sourceCells = inventorySlotTable.getCells();
+        var sourceCells = inventorySlotTable.getCells();
         int index = 0;
 
         for(; index < sourceCells.size; index++) {
@@ -285,7 +284,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
     }
 
     public void removeQuestItemFromInventory(String questID) {
-        Array<Cell> sourceCells = inventorySlotTable.getCells();
+        var sourceCells = inventorySlotTable.getCells();
         for(int index = 0; index < sourceCells.size; index++) {
             InventorySlot inventorySlot = ((InventorySlot) sourceCells.get(index).getActor());
             if (inventorySlot != null) {
